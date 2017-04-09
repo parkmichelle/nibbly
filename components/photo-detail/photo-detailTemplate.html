@@ -1,0 +1,16 @@
+<div class="photos-container">
+  <md-card class="photo-card wide">
+    <md-card-header-text class="cs142-phots-card-header">
+      <span class="md-subhead">{{photo.date_time}}</span>
+    </md-card-header-text>
+      <img ng-src="/images/{{photo.file_name}}" />
+      <md-list flex>
+        <md-list-item class="md-2-line" ng-href="#/users/{{comment.user._id}}" ng-repeat="comment in photo.comments">
+          <div class="md-list-item-text" layout="column">
+            <p><strong>{{comment.user.first_name}} {{comment.user.last_name}}: </strong>{{comment.comment}}</p>
+            <p>{{comment.date_time}}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+  </md-card>
+</div>

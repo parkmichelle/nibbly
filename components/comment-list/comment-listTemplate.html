@@ -1,0 +1,6 @@
+<md-list flex>
+    <md-list-item class="md-1-line cs142-comment-list-item" ng-href="{{comment.link}}" ng-repeat="comment in comments">
+      <img class="cs142-comment-list-thumbnail" ng-src="images/{{comment.photo}}" />
+      <span>{{comment.comment}}</span>
+    </md-list-item>
+</md-list>

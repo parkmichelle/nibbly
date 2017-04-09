@@ -1,0 +1,38 @@
+.photos-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.photo-card {
+  min-width: 48%;
+  max-width: 48%;
+}
+
+.photo-card img {
+  width: 100%;
+  height: auto;
+}
+
+.wide {
+  min-width: 70%;
+  max-width: 70%;
+}
+
+.cs142-phots-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cs142-photos-arrow {
+  text-decoration: none;
+  color: grey;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.cs142-photos-hidden {
+  visibility: hidden
+}

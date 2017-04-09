@@ -1,0 +1,12 @@
+<md-list class="cs142-user-list" flex>
+  <div class="cs142-user-list-item" ng-repeat="user in users">
+    <md-list-item class="md-1-line" ng-href="#/users/{{user._id}}">
+      <div class="md-list-item-text" layout="column">
+        <span>{{user.first_name}} {{user.last_name}}</span>
+      </div>
+    </md-list-item>
+    <div class="cs142-user-list-counts" ng-if="main.advFeat">
+      <div class="cs142-user-list-photo-count">{{counts[user._id].photo_count}}</div> <a ng-href="#/comments/{{user._id}}"><div class="cs142-user-list-comment-count">{{counts[user._id].comment_count}}</div></a>
+    </div>
+  </div>
+</md-list>

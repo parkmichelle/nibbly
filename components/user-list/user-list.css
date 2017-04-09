@@ -1,0 +1,54 @@
+.cs142-user-list {
+  padding-right: 20px;
+}
+
+.cs142-user-list-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cs142-user-list-counts {
+  display: flex;
+  flex-direction: row;
+  width: 80px;
+  justify-content: space-between;
+}
+
+.cs142-user-list-photo-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: green;
+  width: 30px;
+  height: 30px;
+  color: white;
+
+  border-radius: 15px;
+}
+
+.cs142-user-list-comment-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: red;
+  width: 30px;
+  height: 30px;
+
+  transition: 0.3s;
+
+  border-radius: 15px;
+}
+
+.cs142-user-list-comment-count:hover {
+  background: darkred;
+}
+
+.cs142-user-list-counts a {
+  color: white;
+  text-decoration: none;
+}

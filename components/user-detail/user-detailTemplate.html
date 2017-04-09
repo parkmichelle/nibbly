@@ -1,0 +1,27 @@
+
+    <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{user.first_name}} {{user.last_name}}</span>
+            <span class="md-subhead">{{user.description}}</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <md-list flex>
+            <md-list-item class="md-1-line">
+              <div class="md-list-item-text" layout="column">
+                Location: {{user.location}}
+              </div>
+            </md-list-item>
+            <md-list-item class="md-1-line">
+              <div class="md-list-item-text" layout="column">
+                Occupation: {{user.occupation}}
+              </div>
+            </md-list-item>
+          </md-list>
+          <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-href="#/photos/{{user._id}}" ng-if="!main.advFeat">View Photos</md-button>
+          <md-button ng-href="#/photos/{{user._id}}/0" ng-if="main.advFeat">View Photos</md-button>
+        </md-card-actions>
+        </md-card-content>
+      </md-card>
