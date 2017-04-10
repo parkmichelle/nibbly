@@ -8,7 +8,7 @@
  * establishes a connection to the MongoDB named 'cs142project6'.
  *
  * To start the webserver run the command:
- *    node webServer.js
+ *    node server.js
  *
  * Note that anyone able to connect to localhost:portNo will be able to fetch any file accessible
  * to the current user in the current directory or any of its children.
@@ -43,7 +43,7 @@ var SchemaInfo = require('./schema/schemaInfo.js');
 var express = require('express');
 var app = express();
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/nibbly');
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.

@@ -25,7 +25,7 @@ var cs142models = require('./modelData/photoApp.js').cs142models;
 // We use the Mongoose to define the schema stored in MongoDB.
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/nibbly');
 
 // Load the Mongoose schema for Use and Photo
 var User = require('./schema/user.js');

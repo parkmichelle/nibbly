@@ -2,10 +2,9 @@
   "name": "project6",
   "version": "1.0.0",
   "description": "CS142 Project #6 - Photo Sharing App with DB",
-  "main": "webServer.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo Test your code by opening http://localhost:3000 in your browser.",
-    "jshint": "./node_modules/.bin/jshint --config .jshintrc --exclude=node_modules,test . || exit 0"
+    "start": "node server.js"
   },
   "author": "Mendel Rosenblum <mendel@cs.stanford.edu> (http://www.stanford.edu/~mendel)",
   "license": "ISC",
