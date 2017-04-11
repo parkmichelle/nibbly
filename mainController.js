@@ -29,6 +29,10 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/photo-detail/photo-detailTemplate.html',
                 controller: 'PhotoDetailController'
             }).
+            when('/search', {
+                templateUrl: 'components/search-result/search-resultTemplate.html',
+                controller: 'SearchResultController'
+            }).
             otherwise({
                 redirectTo: '/users'
             });
