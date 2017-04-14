@@ -9,25 +9,9 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/home/homeTemplate.html',
                 controller: 'HomeController'
             }).
-            when('/users/:userId', {
-                templateUrl: 'components/user-detail/user-detailTemplate.html',
-                controller: 'UserDetailController'
-            }).
-            when('/photos/:userId', {
-                templateUrl: 'components/user-photos/user-photosTemplate.html',
-                controller: 'UserPhotosController'
-            }).
-            when('/photos/:userId/:index', {
-                templateUrl: 'components/user-photos/user-photosTemplate.html',
-                controller: 'UserPhotosController'
-            }).
-            when('/comments/:userId', {
-                templateUrl: 'components/comment-list/comment-listTemplate.html',
-                controller: 'CommentListController'
-            }).
-            when('/photo/:photoId', {
-                templateUrl: 'components/photo-detail/photo-detailTemplate.html',
-                controller: 'PhotoDetailController'
+            when('/nibble-detail', {
+                templateUrl: 'components/nibble-detail/nibble-detailTemplate.html',
+                controller: 'NibbleDetailController'
             }).
             when('/search', {
                 templateUrl: 'components/search-result/search-resultTemplate.html',
