@@ -1,18 +1,24 @@
 <!-- title -->
-<div class="nibble-detail-title">
-  Nibble Title Here
-</div>
+<h1 class="nibble-detail-title">
+  {{currNibble.name}}
+</h1>
 <!-- author -->
 <div class="nibble-detail-author">
-  Created by Bob Bobby
+  {{currNibble.author}}
 </div>
 <!-- description -->
 <div class="nibble-detail-description">
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique suscipit mauris at interdum. Pellentesque dictum consequat ex, semper lacinia ex vestibulum non. Vivamus porttitor, tortor eu hendrerit eleifend, felis arcu fringilla metus, eget rutrum sem diam id velit. Duis et arcu lacus. Integer id elit vel tortor suscipit pharetra. Phasellus eget efficitur arcu, eu auctor ante.
+  {{currNibble.description}}
 </div>
 <div class="nibble-detail-data-container">
-	<h1>Slides</h1>
+	<h2>Slides</h2>
 	<div class="nibble-detail-slide-view">
+		<!-- TODO: ng-repeat it from db -->
 		<img class="nibble-detail-slide-img" ng-src="/components/nibble-detail/nibble-detailImages/noImageFound.png">
+	</div>
+	<h2>Videos</h2>
+	<div class="nibble-detail-video-view">
+		<!-- TODO: ng-repeat it from db -->
+		<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noImageFound.png">
 	</div>
 </div>
