@@ -5,9 +5,9 @@ var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource'
 cs142App.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/', {
+            when('/home', {
                 templateUrl: 'components/home/homeTemplate.html',
-                controller: 'HomeController.js'
+                controller: 'HomeController'
             }).
             when('/users/:userId', {
                 templateUrl: 'components/user-detail/user-detailTemplate.html',
@@ -34,7 +34,7 @@ cs142App.config(['$routeProvider',
                 controller: 'SearchResultController'
             }).
             otherwise({
-                redirectTo: '/'
+                redirectTo: '/home'
             });
     }]);
 
