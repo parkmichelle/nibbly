@@ -1,13 +1,58 @@
-<md-input-container md-no-float>
-  <input type="text" placeholder="Search...">
-</md-input-container>
+<div ng-controller="SearchResultController">
+<div class="search-bar-container">
+  <input type="text" placeholder="Search..." class="search-bar">
+</div>
 
-<div ng-cloak>
-  <md-content>
-    <md-tabs md-dynamic-height md-border-bottom>
+<div layout="column" style="height:500px;">
+
+  <section layout="row" flex>
+
+    <md-sidenav
+        class="md-sidenav-left"
+        md-component-id="left"
+        md-is-locked-open="$mdMedia('gt-md')"
+        md-whiteframe="4">
+
+      <md-content flex layout="column" layout-padding>
+        <h1>Filter By:</h1>
+        <h2>Skill Level</h2>
+        <md-checkbox aria-label="Beginner">
+          Beginner
+        </md-checkbox>
+        <md-checkbox aria-label="Beginner">
+          Intermediate
+        </md-checkbox>
+        <md-checkbox aria-label="Beginner">
+          Expert
+        </md-checkbox>
+        <h2>Duration</h2>
+        <h2>Age Range</h2>
+        <h2>Rating</h2>
+      </md-content>
+
+    </md-sidenav>
+
+    <md-content flex layout-padding>
+
+      <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="All">
         <md-content class="md-padding">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+          <div class="all-search-result" ng-repeat="item in data">
+            <div class="all-search-result-tile">
+              <h3>{{item.title}}</h3>
+              <h4>By {{item.author}}</h4>
+              <div class="all-search-result-bottom">
+                <span>{{item.numDownloads}}</span>
+                <span>{{item.rating}} stars</span>
+              </div>
+            </div>
+
+            <div class="all-search-result-actions">
+              <p>
+                {{item.description}}
+              </p>
+            </div>
+          </div>
         </md-content>
       </md-tab>
       <md-tab label="Slides">
@@ -17,7 +62,7 @@
           <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
         </md-content>
       </md-tab>
-      <md-tab label="Videos">
+      <md-tab label="Video">
         <md-content class="md-padding">
           <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
         </md-content>
@@ -28,5 +73,8 @@
         </md-content>
       </md-tab>
     </md-tabs>
-  </md-content>
+
+    </md-content>
+  </section>
+</div>
 </div>
