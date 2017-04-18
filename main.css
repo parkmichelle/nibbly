@@ -5,7 +5,15 @@ Since CSS uses a global name space for classes we should use class names startin
 cs142-main- here.
 */
 
-.cs142-main-toolbar {
+html {
+	font-family: Roboto, sans-serif;
+}
+
+.main-container {
+	padding: 40px;
+}
+
+.main-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;

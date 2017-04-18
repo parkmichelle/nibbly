@@ -1,3 +1,40 @@
-.home-title {
-	
+.nibble-detail-header {
+	display: flex;
+	flex-direction: row; 
+	justify-content: center;
+	margin-bottom: 7px;
+	align-items: center;
+}
+
+.nibble-detail-title {
+	text-align: center;
+	font-size: 40px;
+	padding-left: 30px; /* math this to be accurate */
+}
+
+#nibble-detail-download-button {
+	max-width: 40px;
+	margin-left: 10px;
+}
+
+.nibble-detail-author {
+	font-size: 20px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.nibble-detail-data-container {
+	display: flex;
+	flex-direction: row; 
+	justify-content: space-between;
+	margin-bottom: 7px;
+	align-items: center;
+}
+
+.nibble-detail-slide-img {
+	min-width: 400px;
+}
+
+.nibble-detail-video-img {
+	min-width: 400px;
 }
