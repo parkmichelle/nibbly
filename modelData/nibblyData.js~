@@ -1,0 +1,18 @@
+"use strict";
+
+(function() {
+
+    var schemaInfo = {
+      load_date_time: "Fri Apr 29 2016 01:45:15 GMT-0700 (PDT)",
+      __v: 0,
+      _id: "57231f1b30e4351f4e9f4bf6"
+    };
+
+    var nibble1 = {
+	_id: "0",
+	description: "test"
+    };
+
+    var nibblyModel = function() {
+	return nibble1;
+    }

@@ -1,0 +1,24 @@
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/nibbly');
+
+db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+
+    var nibbleSchema = new Schema({
+	author: {
+	    name: String,
+	}
+    });
+
+    var Nibble = mongoose.model('Nibble', nibbleSchema);
+
+    var nibble = new Nibble({
+	author: { name: 'Rachel Gardner'}
+    });
+
+    nibble.save();
+
+});
