@@ -19,6 +19,7 @@ db.once('open', function() {
 	    title: nibble.title,
 	    author: nibble.author,
 	    description: nibble.description,
+	    organization: nibble.organization,
 	    rating: nibble.rating,
 	    numDownloads: nibble.numDownloads
 	}, function(mongoDb_err) { // deal with MongoDB errors

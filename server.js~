@@ -36,9 +36,7 @@ var async = require('async');
 
 
 // Load the Mongoose schema for User, Photo, and SchemaInfo
-var User = require('./schema/user.js');
-var Photo = require('./schema/photo.js');
-var SchemaInfo = require('./schema/schemaInfo.js');
+var Nibble = require('./schema/nibble.js');
 
 var express = require('express');
 var app = express();
@@ -49,249 +47,30 @@ mongoose.connect('mongodb://localhost/nibbly');
 // the work for us.
 app.use(express.static(__dirname));
 
-
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
 });
 
-/*
- * Use express to handle argument passing in the URL.  This .get will cause express
- * To accept URLs with /test/<something> and return the something in request.params.p1
- * If implement the get as follows:
- * /test or /test/info - Return the SchemaInfo object of the database in JSON format. This
- *                       is good for testing connectivity with  MongoDB.
- * /test/counts - Return an object with the counts of the different collections in JSON format
- */
-app.get('/test/:p1', function (request, response) {
-    // Express parses the ":p1" from the URL and returns it in the request.params objects.
-    console.log('/test called with param1 = ', request.params.p1);
-
-    var param = request.params.p1 || 'info';
-
-    if (param === 'info') {
-        // Fetch the SchemaInfo. There should only one of them. The query of {} will match it.
-        SchemaInfo.find({}, function (err, info) {
-            if (err) {
-                // Query returned an error.  We pass it back to the browser with an Internal Service
-                // Error (500) error code.
-                console.error('Doing /user/info error:', err);
-                response.status(500).send(JSON.stringify(err));
-                return;
-            }
-            if (info.length === 0) {
-                // Query didn't return an error but didn't find the SchemaInfo object - This
-                // is also an internal error return.
-                response.status(500).send('Missing SchemaInfo');
-                return;
-            }
-
-            // We got the object - return it in JSON format.
-            console.log('SchemaInfo', info[0]);
-            response.end(JSON.stringify(info[0]));
-        });
-    } else if (param === 'counts') {
-        // In order to return the counts of all the collections we need to do an async
-        // call to each collections. That is tricky to do so we use the async package
-        // do the work.  We put the collections into array and use async.each to
-        // do each .count() query.
-        var collections = [
-            {name: 'user', collection: User},
-            {name: 'photo', collection: Photo},
-            {name: 'schemaInfo', collection: SchemaInfo}
-        ];
-        async.each(collections, function (col, done_callback) {
-            col.collection.count({}, function (err, count) {
-                col.count = count;
-                done_callback(err);
-            });
-        }, function (err) {
-            if (err) {
-                response.status(500).send(JSON.stringify(err));
-            } else {
-                var obj = {};
-                for (var i = 0; i < collections.length; i++) {
-                    obj[collections[i].name] = collections[i].count;
-                }
-                response.end(JSON.stringify(obj));
-
-            }
-        });
-    } else {
-        // If we know understand the parameter we return a (Bad Parameter) (400) status.
-        response.status(400).send('Bad param ' + param);
-    }
-});
-
-/*
- * URL /user/list - Return all the User object.
- */
-app.get('/user/list', function (request, response) {
-    User.find({}, '_id first_name last_name', function (err, users) {
-      if (err || !users) {
-        response.status(400).send('Not found');
-        return;
-      }
-      response.status(200).send(JSON.parse(JSON.stringify(users)));
+app.get('/nibble/:id', function(req, res){
+    var id = req.params.id;
+    Nibble.find({_id: id}, function(err, nibble){
+	if (err || !nibble) {
+	    res.status(400).send('Not found');
+	    return;
+	}
+	res.status(200).send(JSON.parse(JSON.stringify(nibble)));
     });
 });
 
-/*
- * URL /user/:id - Return the information for User (id)
- */
-app.get('/user/:id', function (request, response) {
-    var id = request.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      response.status(400).send(id + ' is not a valid ID');
-      return;
-    }
-    User.findOne({_id: id}, function (err, user) {
-      user = JSON.parse(JSON.stringify(user));
-      delete user.__v;
-      if (err || !user) {
-        console.log('User with _id:' + id + ' not found.');
-        response.status(400).send('User with _id:' + id + ' not found.');
-        return;
-      }
-      response.status(200).send(user);
+app.get('/list/nibbles', function(req, res){
+    Nibble.find({}, function(err, nibbles){
+	if (err || !nibbles) {
+	    res.status(400).send('Not found');
+	    return;
+	}
+	res.status(200).send(JSON.parse(JSON.stringify(nibbles)));
     });
 });
-
-/*
- * URL /photosOfUser/:id - Return the Photos for User (id)
- */
-app.get('/photosOfUser/:id', function (request, response) {
-    var id = request.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      response.status(400).send(id + ' is not a valid ID');
-      return;
-    }
-    Photo.find({user_id: id}, function (err, photos) {
-      if (err || !photos) {
-        console.log('Photos for user with _id:' + id + ' not found.');
-        response.status(400).send('Not found');
-        return;
-      }
-      photos = JSON.parse(JSON.stringify(photos));
-      async.each(photos, function(photo, photo_callback) {
-        async.each(photo.comments, function(comment, comment_callback) {
-          User.findOne({_id: comment.user_id}, '_id first_name last_name', function(err, user) {
-            comment.user = JSON.parse(JSON.stringify(user));
-            delete comment.user_id;
-            comment_callback(err);
-          });
-        }, function(err) {
-          if (err) {
-            response.status(500).send(JSON.stringify(err));
-            return;
-          }
-          photo_callback();
-        });
-      }, function() {
-        for (var i = 0; i < photos.length; i++) {
-          var photo = photos[i];
-          delete photo.__v;
-        }
-        response.status(200).send(photos);
-      });
-    });
-});
-
-/*
- * URL /counts - Return all Users' photo and comment counts
- */
-app.get('/counts', function (request, response) {
-    Photo.find(function (err, photos) {
-      var counts = {};
-      async.each(photos, function(photo, photo_callback) {
-        var photoUser = photo.user_id;
-        if (counts[photoUser] === undefined) {
-          counts[photoUser] = {photo_count: 0, comment_count: 0};
-        }
-        counts[photoUser].photo_count += 1;
-        for (var j = 0; j < photo.comments.length; j++) {
-          var comment = photo.comments[j];
-          var commentUser = comment.user_id;
-          if (counts[commentUser] === undefined) {
-            counts[commentUser] = {photo_count: 0, comment_count: 0};
-          }
-          counts[commentUser].comment_count += 1;
-        }
-        photo_callback(err);
-      }, function(err) {
-        if (err) {
-          response.status(400).send('Not found');
-          return;
-        }
-        response.status(200).send(counts);
-      });
-    });
-});
-
-/*
- * URL /comments/:id - Comments written by a given user
- */
-app.get('/comments/:id', function (request, response) {
-    var id = request.params.id;
-    Photo.find(function (err, photos) {
-      var comments = [];
-      async.each(photos, function(photo, photo_callback) {
-        for (var j = 0; j < photo.comments.length; j++) {
-          var comment = photo.comments[j];
-          if (JSON.stringify(comment.user_id) === JSON.stringify(id)) {
-            comments.push({comment: comment.comment, photo: photo.file_name, link: "#/photo/" + photo._id});
-          }
-        }
-        photo_callback(err);
-      }, function(err) {
-        if (err) {
-          response.status(400).send('Not found');
-          return;
-        }
-        response.status(200).send(comments);
-      });
-    });
-});
-
-/*
- * URL /photoWithID/:id - Return a photo with the given photo ID
- */
-app.get('/photoWithID/:id', function (request, response) {
-  var id = request.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    response.status(400).send('Not found');
-    return;
-  }
-  Photo.find({_id: id}, function (err, photos) {
-    if (err || !photos) {
-      console.log('Photos for user with _id:' + id + ' not found.');
-      response.status(400).send('Not found');
-      return;
-    }
-    photos = JSON.parse(JSON.stringify(photos));
-    async.each(photos, function(photo, photo_callback) {
-      async.each(photo.comments, function(comment, comment_callback) {
-        User.findOne({_id: comment.user_id}, '_id first_name last_name', function(err, user) {
-          comment.user = JSON.parse(JSON.stringify(user));
-          delete comment.user_id;
-          comment_callback(err);
-        });
-      }, function(err) {
-        if (err) {
-          response.status(500).send(JSON.stringify(err));
-          return;
-        }
-        photo_callback();
-      });
-    }, function() {
-      for (var i = 0; i < photos.length; i++) {
-        var photo = photos[i];
-        delete photo.__v;
-      }
-      response.status(200).send(photos);
-    });
-  });
-});
-
 
 var server = app.listen(3000, function () {
     var port = server.address().port;

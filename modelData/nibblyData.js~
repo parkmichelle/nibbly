@@ -2,17 +2,24 @@
 
 (function() {
 
-    var schemaInfo = {
-      load_date_time: "Fri Apr 29 2016 01:45:15 GMT-0700 (PDT)",
-      __v: 0,
-      _id: "57231f1b30e4351f4e9f4bf6"
-    };
-
     var nibble1 = {
-	_id: "0",
-	description: "test"
+	title: "Intro to Giphy API",
+	author: "Rachel Gardner",
+	description: "Introduces the concept of APIs and teaches how to use Giphy API",
+	rating: 4,
+	numDownloads: 2595
     };
 
+    var nibbles = [nibble1];
+    
     var nibblyModel = function() {
-	return nibble1;
+	return nibbles;
     }
+
+    var nibblyModels = {
+	nibblyModel: nibblyModel
+    };
+//    console.log(nibblyModels);
+    exports.nibblyModels = nibblyModels;
+})();
+	

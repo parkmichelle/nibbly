@@ -7,6 +7,7 @@ var nibbleSchema = new mongoose.Schema({
     title: String,
     author: String,
     description: String,
+    organization: String,
     rating: Number,
     numDownloads: Number
 });

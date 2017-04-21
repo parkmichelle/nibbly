@@ -49,7 +49,7 @@ Promise.all(removePromises).then(function () {
         return User.create({
             first_name: user.first_name,
             last_name: user.last_name,
-            location: user.location,
+	    organization: user.organization,
             description: user.description,
             occupation: user.occupation
         }, function (err, userObj) {
