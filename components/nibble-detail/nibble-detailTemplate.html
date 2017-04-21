@@ -3,6 +3,16 @@
 	<span class="nibble-detail-title">{{currNibble.name}}</span>
 	<img id="nibble-detail-download-button" ng-src="/components/nibble-detail/nibble-detailImages/icon-download.png">
 </div>
+<!-- download modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Downloading Test Nibble #1 by Bob Bobby :)</p>
+  </div>
+
+</div>
 <!-- author -->
 <div class="nibble-detail-author">Created by {{currNibble.author}} from {{currNibble.organization}}</div>
 
@@ -11,19 +21,24 @@
   Description:
   {{currNibble.description}}
 </div>
+<!-- media contents -->
 <div class="nibble-detail-data-container">
 	<span class="nibble-detail-slides-container">
 		<h2>Slides</h2>
 		<div class="nibble-detail-slide-view">
 			<!-- TODO: ng-repeat it from db -->
-			<img class="nibble-detail-slide-img" ng-src="/components/nibble-detail/nibble-detailImages/noImageFound.png">
+			<img class="nibble-detail-slide-img" ng-src="/components/nibble-detail/nibble-detailImages/testnibble_1.png">
 		</div>
 	</span>
 	<span class ="nibble-detail-videos-container">
 		<h2>Videos</h2>
+		<!-- TODO: ng-repeat it from db -->
 		<div class="nibble-detail-video-view">
-			<!-- TODO: ng-repeat it from db -->
-			<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noImageFound.png">
-		</span>
+			<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noVideoFound.png">
+		</div>
+		<div class="nibble-detail-video-view">
+			<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noVideoFound.png">
+		</div>
+
 	</div>
 </div>

@@ -9,7 +9,7 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/home/homeTemplate.html',
                 controller: 'HomeController'
             }).
-            when('/nibble-detail/:id', {
+            when('/nibble-detail', {
                 templateUrl: 'components/nibble-detail/nibble-detailTemplate.html',
                 controller: 'NibbleDetailController'
             }).
