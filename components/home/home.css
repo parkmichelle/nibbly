@@ -1,3 +1,32 @@
 .home-title {
-	
+	font-size: 80px;
+	color: #6b6b6b;
+	font-family: "Century Gothic";
+}
+
+.flex-container {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: 80vh;
+}
+
+.home-search-bar {
+	min-width: 700px;
+}
+
+.home-search-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#home-search-icon {
+	max-width: 30px;
+}
+
+html {
+	width: 100%;
 }
