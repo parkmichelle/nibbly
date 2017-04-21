@@ -36,16 +36,23 @@ html {
 	display: flex;
 	flex-direction: row; 
 	justify-content: space-between;
-	margin-bottom: 7px;
 	align-items: center;
 }
 
+.nibble-detail-videos-container {
+	display: flex;
+	flex-direction: column; 
+	justify-content: space-between;
+	margin: 40px;
+}
+
 .nibble-detail-slide-img {
-	min-width: 400px;
+	width: 600px;
 }
 
 .nibble-detail-video-img {
-	min-width: 400px;
+	width: 300px;
+	margin-right: 200px;
 }
 
 .modal {
