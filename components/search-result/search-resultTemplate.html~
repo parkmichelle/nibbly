@@ -39,18 +39,26 @@
         <md-content class="md-padding">
           <div class="all-search-result" ng-repeat="item in data">
             <div class="all-search-result-tile">
-              <h3>{{item.title}}</h3>
-              <h4>By {{item.author}}</h4>
-              <div class="all-search-result-bottom">
+	      <a href="#/nibble-detail/{{item._id}}">
+		<h3>{{item.title}}</h3>
+	      </a>
+	      <h4>By {{item.author}}</h4>
+	      <div class="all-search-result-bottom">
                 <span>{{item.numDownloads}}</span>
                 <span>{{item.rating}} stars</span>
-              </div>
+	      </div>
             </div>
+
 
             <div class="all-search-result-actions">
               <p>
                 {{item.description}}
               </p>
+	      <div>
+		<md-icon ng-bind="'code'"></md-icon>
+		<md-icon ng-bind="'slideshow'"></md-icon>
+		<md-icon ng-bind="'videocam'"></md-icon>
+	      </div>
             </div>
           </div>
         </md-content>

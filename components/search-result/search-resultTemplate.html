@@ -1,6 +1,6 @@
-<div ng-controller="SearchResultController">
+<div ng-controller="SearchResultController" ng-init="query='API'">
 <div class="search-bar-container">
-  <input type="text" placeholder="Search..." class="search-bar">
+  <input type="text" placeholder="Search..." class="search-bar" ng-model="query">
 </div>
 
 <div layout="column" style="height:500px;">
