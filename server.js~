@@ -53,7 +53,8 @@ app.get('/', function (request, response) {
 
 app.get('/nibble/:id', function(req, res){
     var id = req.params.id;
-    Nibble.find({_id: id}, function(err, nibble){
+    Nibble.findOne({_id: id}, function(err, nibble){
+	console.log("nibble:", nibble);
 	if (err || !nibble) {
 	    res.status(400).send('Not found');
 	    return;

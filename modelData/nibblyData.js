@@ -20,7 +20,7 @@
     var nibblyModels = {
 	nibblyModel: nibblyModel
     };
-//    console.log(nibblyModels);
+
     exports.nibblyModels = nibblyModels;
 })();
 	

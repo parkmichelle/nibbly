@@ -30,6 +30,7 @@ db.once('open', function() {
 	if (async_err){
 	    console.error('Async error: error creating nibble', async_err);
 	} else {
+	    console.log("?");
 	    mongoose.disconnect();
 	}
     });

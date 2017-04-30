@@ -6,6 +6,7 @@
 	title: "Intro to Giphy API",
 	author: "Rachel Gardner",
 	description: "Introduces the concept of APIs and teaches how to use Giphy API",
+	organization: "StreetCode",
 	rating: 4,
 	numDownloads: 2595
     };
