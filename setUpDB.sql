@@ -1,13 +1,12 @@
---CREATE DATABASE nibbly;
-CREATE TABLE Nibble (
-       NID
-       PID
-       Title varchar(255),
-       Description varchar(1000),
-       NumDownloads int,
-       Rating int,
-       Difficulty int, --may map to something
-       Duration int --in minutes?
+CREATE TABLE nibbles (
+       NID serial primary key,
+       PID int,
+       title varchar(255),
+       description varchar(1000),
+       num_downloads int,
+       rating int,
+       difficulty int, --may map to something
+       duration int --in minutes?
        );
 
 /*
