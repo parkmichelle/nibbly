@@ -31,17 +31,17 @@
  * /photos        - Returns an array of all photos.
  */
 
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 var async = require('async');
 
 
 // Load the Mongoose schema for User, Photo, and SchemaInfo
-var Nibble = require('./schema/nibble.js');
+//var Nibble = require('./schema/nibble.js');
 
 var express = require('express');
 var app = express();
 
-mongoose.connect('mongodb://localhost/nibbly');
+//mongoose.connect('mongodb://localhost/nibbly');
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -51,6 +51,8 @@ app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
 });
 
+/* Mongo version */
+/*
 app.get('/nibble/:id', function(req, res){
     var id = req.params.id;
     Nibble.findOne({_id: id}, function(err, nibble){
@@ -71,6 +73,26 @@ app.get('/list/nibbles', function(req, res){
 	res.status(200).send(JSON.parse(JSON.stringify(nibbles)));
     });
 });
+*/
+
+app.get('/list/nibbles', function(req, res) {
+    models.Nibble.findAll().then(function(nibbles) {
+	res.json(nibbles);
+    });
+});
+
+app.post('/nibble', function(req, res) {
+    models.Nibble.create({
+	title: req.body.title,
+	description: req.body.description
+    }).then(function(nibbles){
+	res.json(nibbles.dataValues);
+    }).catch(function(error){
+	console.log("ops: " + error);
+	res.status(500).json({error: 'error'});
+    });
+});
+
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
