@@ -45,3 +45,5 @@ Now if you type `\dt` you can see the table(s) that have been created. Typing `\
 Now the database is set up! You can find the port it's running on using the following command:
 
 	SELECT * FROM pg_settings WHERE name = 'port';
+
+The default port is 5432.
