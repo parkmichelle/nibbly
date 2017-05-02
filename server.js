@@ -27,6 +27,8 @@
 //var mongoose = require('mongoose');
 var async = require('async');
 
+var models = require("/models");
+
 
 // Load the Mongoose schema for User, Photo, and SchemaInfo
 //var Nibble = require('./schema/nibble.js');
