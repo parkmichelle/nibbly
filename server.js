@@ -22,14 +22,7 @@
  *                   Format is a JSON object with properties being the collection name and
  *                   the values being the counts.
  *
- * The following URLs need to be changed to fetch there reply values from the database.
- * /user/list     -  Returns an array containing all the User objects from the database.
- *                   (JSON format)
- * /user/:id      -  Returns the User object with the _id of id. (JSON format).
- * /photosOfUser/:id' - Returns an array with all the photos of the User (id). Each photo
- *                      should have all the Comments on the Photo (JSON format)
- * /photos        - Returns an array of all photos.
- */
+*/
 
 //var mongoose = require('mongoose');
 var async = require('async');
@@ -38,10 +31,19 @@ var async = require('async');
 // Load the Mongoose schema for User, Photo, and SchemaInfo
 //var Nibble = require('./schema/nibble.js');
 
+// attempt to set up sequel-ize???!!!
+
+var models = require('./models'); //place on top of the file
+//var Nibble = unknown.nibble;
+//console.log(Nibble);
+console.log(models);
+console.log(models.Nibble);
+// end of sketchy code
+
+
 var express = require('express');
 var app = express();
 
-//mongoose.connect('mongodb://localhost/nibbly');
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -50,30 +52,6 @@ app.use(express.static(__dirname));
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
 });
-
-/* Mongo version */
-/*
-app.get('/nibble/:id', function(req, res){
-    var id = req.params.id;
-    Nibble.findOne({_id: id}, function(err, nibble){
-	if (err || !nibble) {
-	    res.status(400).send('Not found');
-	    return;
-	}
-	res.status(200).send(JSON.parse(JSON.stringify(nibble)));
-    });
-});
-
-app.get('/list/nibbles', function(req, res){
-    Nibble.find({}, function(err, nibbles){
-	if (err || !nibbles) {
-	    res.status(400).send('Not found');
-	    return;
-	}
-	res.status(200).send(JSON.parse(JSON.stringify(nibbles)));
-    });
-});
-*/
 
 app.get('/list/nibbles', function(req, res) {
     models.Nibble.findAll().then(function(nibbles) {

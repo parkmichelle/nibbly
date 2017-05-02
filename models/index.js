@@ -9,7 +9,7 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
 var db = {};
  
 fs.readdirSync(__dirname).filter(function(file) {
- return (file.indexOf(".") !== 0) && (file !== "index.js");
+ return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
  var model = sequelize["import"](path.join(__dirname, file));
  db[model.name] = model;
@@ -25,3 +25,14 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
  
 module.exports = db;
+
+var models = require('./');
+models.sequelize
+//  .authenticate()
+    .sync({force: true})
+    .then(function () {
+	console.log('Connection successful');
+    })
+    .catch(function(error) {
+	console.log("Error creating connection:", error);
+    });

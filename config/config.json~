@@ -5,6 +5,6 @@
 "database": "nibbly",
 "host": "127.0.0.1",
 "dialect": "postgres",
-"port": "DATABASE_PORT"
+"port": "5432"
 }
 }

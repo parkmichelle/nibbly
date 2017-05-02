@@ -1,13 +1,14 @@
 'use strict';
 
-// attempt to set up sequel-ize???!!!
-var models = require("./models"); //place on top of the file
+/*
+// begin sketch code
 models.sequelize.sync().then(function() {
  var server = app.listen(app.get('port'), function() {
  console.log('Express server listening on port ' + server.address().port);
  });
 });
-
+// end sketch code
+*/
 var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource']);
 
 cs142App.config(['$routeProvider',
