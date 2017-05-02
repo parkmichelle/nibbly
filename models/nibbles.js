@@ -19,32 +19,10 @@ module.exports = function(sequelize, DataTypes) {
      rating : {
 	 type : DataTypes.INTEGER
      },
-     difficuly : {
+     difficulty : {
 	 type : DataTypes.INTEGER
      },
      
- }, {
-     timestamps: false
- }
-			      );
+ });
     return Nibble;
 };
-
-
-/*
-var db = require('./index.js');
-
-var sequelize = db.sequelize;
-
-var Nibble = sequelize.define("nibble", {
-    title : {
-	type : sequelize.STRING,
-	allowNull : false
-    },
-    description : {
-	type : sequelize.STRING,
-    }
-});
-
-module.exports = Nibble;
-*/
