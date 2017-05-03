@@ -15,6 +15,9 @@ module.exports = function(sequelize, DataTypes) {
      rating : {
 	 type : DataTypes.INTEGER
      },
+     featured: {
+	 type : DataTypes.BOOLEAN
+     },
      difficulty : {
 	 type : DataTypes.INTEGER
      },

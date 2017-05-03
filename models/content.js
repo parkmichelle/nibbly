@@ -7,6 +7,9 @@ module.exports = function(sequelize, DataTypes) {
      description : {
 	 type : DataTypes.STRING,
      },
+     file : {
+	 type : DataTypes.BLOB,
+     },
      notes : {
 	 type : DataTypes.STRING,
      }

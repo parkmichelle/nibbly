@@ -32,10 +32,14 @@ db.Sequelize = Sequelize;
 //var models = require('./models/');
 
 // TODO - move to another file
-db.User.hasMany(db.Nibble);
-//models.User.hasMany(models.Nibble);
-//models.Nibble.belongsTo(models.User);
-console.log(db.User);
+
+User.hasMany(Nibble);
+Nibble.belongsTo(User);
+Nibble.hasMany(Content);
+Content.hasOne(ContentType);
+
+var giphySlides = FS.readFileSync(__dirname + '\seedContent\GiphySlides.ppt');
+
 var user1 = db.User.create(
     {
 	name: "Rachel Gardner",
@@ -46,7 +50,12 @@ var user1 = db.User.create(
 	    description: "A nibble",
 	    num_downloads: 2435,
 	    rating: 4,
-	    difficulty: 3
+	    difficulty: 3,
+	    Content:
+	    [{
+		title: "Giphy Slides",
+		file : giphySlides
+	    }]
 	}]
 
     },

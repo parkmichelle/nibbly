@@ -57,7 +57,7 @@ app.get('/list/nibbles', function(req, res) {
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
-    Nibble.findById(id, {include:[User]}).then(function(nibbles) {
+    Nibble.findById(id, {include:[User, Content]}).then(function(nibbles) {
 	res.json(nibbles);
     });
 });
