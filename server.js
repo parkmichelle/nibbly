@@ -21,6 +21,8 @@ var async = require('async');
 var models = require('./models');
 var User = models.User;
 var Nibble = models.Nibble;
+var Content = models.Content;
+var ContentType = models.ContentType;
 
 var express = require('express');
 var app = express();
@@ -31,6 +33,8 @@ var app = express();
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
+Nibble.hasMany(Content);
+Content.hasOne(ContentType);
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -44,7 +48,7 @@ app.get('/', function (request, response) {
 app.get('/list/nibbles', function(req, res) {
     Nibble.findAll({
 	where : {},
-	include : [User]
+	include : [User, Content]
     }).then(function(nibbles) {
 	res.json(nibbles);
     });
