@@ -13,6 +13,29 @@
 	height: 80vh;
 }
 
+.home-featured-container {
+	display: flex;
+	width: 100%;
+	align-items: left;
+	flex-direction: row;
+}
+
+.home-featured-title-container {
+	display: flex;
+	width: 100%;
+	align-items: left;
+	flex-direction: row;
+	font-family: "Century Gothic";
+	color: gray;
+}
+
+.home-featured-nibble {
+	min-width: 200px;
+	padding: 10px;
+	border: solid gray 3px;
+	margin-right: 20px;
+}
+
 .home-search-bar {
 	min-width: 700px;
 }
