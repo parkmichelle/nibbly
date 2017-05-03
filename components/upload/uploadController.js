@@ -2,22 +2,32 @@
 
 cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', '$location', '$cookieStore', '$mdToast',
   function ($scope, $routeParams, $resource, $location, $cookieStore, $mdToast) {
-    $scope.main.location = 'login';
+    $scope.uploadNibble = {};
+    $scope.uploadNibble.title = "";
+    $scope.uploadNibble.subject = "";
+    $scope.uploadNibble.duration;
+    $scope.uploadNibble.difficulty = "";
+    $scope.uploadNibble.files = [];
 
-    $scope.login = function(username, password) {
-      var user = {username: username, password: password, _id: 1234};
-      if (username === "took") {
-        $scope.main.loginUser = user;
-        $location.path("/home");
-        $cookieStore.put("loginUser", user);
+    $scope.errorMessage = "";
+
+    $scope.createNibble = function(username) {
+      if (!($scope.title && $scope.subject && $scope.duration && ($scope.files !== []))) {
+        // TODO: show error message
+        $scope.errorMessage = "Oops! You're missing a required parameter."
       } else {
-        var errStr = "Login name does not exist.";
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent(errStr)
-            .position('bottom right' )
-            .hideDelay(3000)
-        );
+        // all parameters are filled, create nibble
+        
       }
     };
+
+    var Nibbles = $resource('/nibble', {}, {
+        put: { method: 'POST', isArray: false }
+    });
+    
+    Nibbles.put(function(nibbles) {
+        console.log(nibbles);
+        $scope.data = nibbles;
+    });
+
   }]);
