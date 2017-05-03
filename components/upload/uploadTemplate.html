@@ -15,10 +15,11 @@
     </md-select>
 		<md-input-container class="md-block">
         <label>Duration</label>
-        <input type="number" step="any" ng-pattern="/^1234$/" ng-model="uploadNibble.duration">
+        <input type="number" step="any" ng-model="uploadNibble.duration">
     </md-input-container>
-		<input class="ng-hide" id="input-file-id" multiple type="file" />
-		<label for="input-file-id" class="md-button md-raised">Choose Files</label>
+    	<input id="cs142-upload-photo-choose-file" type="file" accept="image/*"  onchange="angular.element(this).scope().inputFileNameChanged(this)">
+<!-- 		<input class="ng-hide" id="input-file-id" multiple type="file" />
+		<label for="input-file-id" class="md-button md-raised">Choose Files</label> -->
 		<br><br><br>
 
 		<br><br>
@@ -30,7 +31,7 @@
     </md-radio-group>
     <p class="upload-error-msg">{{errorMessage}}</p>
 		<section layout="row" class="upload-button">
-			<md-button class="md-raised md-primary" ng-click="createNibble(username)">Create</md-button>
+			<md-button class="md-raised md-primary" ng-click="createNibbleClick(username)">Create</md-button>
 		</section>
 	</form>
 </div>
