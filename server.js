@@ -19,6 +19,8 @@ var async = require('async');
 
 // load all of the models
 var models = require('./models');
+var User = models.User;
+var Nibble = models.Nibble;
 
 var express = require('express');
 var app = express();
@@ -27,7 +29,8 @@ var app = express();
    can have many nibbles (automatically handles
    creation of foreign keys
 */
-models.User.hasMany(models.Nibble);
+User.hasMany(Nibble);
+Nibble.belongsTo(User);
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -39,7 +42,10 @@ app.get('/', function (request, response) {
 
 // get all nibbles
 app.get('/list/nibbles', function(req, res) {
-    models.Nibble.findAll().then(function(nibbles) {
+    Nibble.findAll({
+	where : {},
+	include : [User]
+    }).then(function(nibbles) {
 	res.json(nibbles);
     });
 });
@@ -47,13 +53,13 @@ app.get('/list/nibbles', function(req, res) {
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
-    models.Nibble.findById(id).then(function(nibbles) {
+    Nibble.findById(id, {include:[User]}).then(function(nibbles) {
 	res.json(nibbles);
     });
 });
 
 app.post('/nibble', function(req, res) {
-    models.Nibble.create({
+    Nibble.create({
 	title: req.body.title,
 	description: req.body.description
     }).then(function(nibbles){
