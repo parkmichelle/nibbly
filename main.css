@@ -9,7 +9,7 @@ html {
 	font-family: Roboto, sans-serif;
 }
 
-a {
+a.home-toolbar-anchor {
 	text-decoration: none;
 	color: white;
 }
