@@ -1,0 +1,20 @@
+<!-- title -->
+<div class="login-flex-container">
+	<div class="login-title">
+	  Login
+	</div>
+	<form name="loginForm" class="login-form">
+  	<md-input-container class="md-block">
+      <label>Username/Email</label>
+      <input ng-model="username">
+    </md-input-container>
+		<md-input-container class="md-block">
+      <label>Password</label>
+      <input type="password" ng-model="password">
+    </md-input-container>
+		<section layout="row" class="login-buttons">
+			<md-button class="md-raised">Register</md-button>
+			<md-button class="md-raised md-primary" ng-click="login(username, password)">Login</md-button>
+		</section>
+	</form>
+</div>

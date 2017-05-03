@@ -9,6 +9,11 @@ html {
 	font-family: Roboto, sans-serif;
 }
 
+a {
+	text-decoration: none;
+	color: white;
+}
+
 .main-container {
 	padding: 40px;
 }
@@ -19,4 +24,17 @@ html {
   justify-content: space-between;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.avatar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: darkgrey;
+
+	padding: 10px;
+	width: 45px;
+	height: 45px;
+	border-radius: 25px;
 }
