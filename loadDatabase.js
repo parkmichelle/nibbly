@@ -1,36 +1,81 @@
 "use strict";
+ 
+var fs = require("fs");
+var path = require("path");
+var Sequelize = require("sequelize");
+var env = process.env.NODE_ENV || "development";
 
-var nibblyModels = require('./modelData/nibblyData.js').nibblyModels;
-var mongoose = require('mongoose');
+// pull database config info from config.json
+var config = require(__dirname + '/config/config.json')[env];
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
+var db = {};
 
-mongoose.connect('mongodb://localhost/nibbly');
-
-var Nibble = require('./schema/nibble.js');
-var async = require('async');
-var versionString = '1.0';
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    var nibblyModel = nibblyModels.nibblyModel();
-    async.each(nibblyModel, function(nibble, nibble_callback){
-	Nibble.create({
-	    title: nibble.title,
-	    author: nibble.author,
-	    description: nibble.description,
-	    organization: nibble.organization,
-	    rating: nibble.rating,
-	    numDownloads: nibble.numDownloads
-	}, function(mongoDb_err) { // deal with MongoDB errors
-	    nibble_callback(mongoDb_err);
-	});
-
-    }, function(async_err) {
-	if (async_err){
-	    console.error('Async error: error creating nibble', async_err);
-	} else {
-	    mongoose.disconnect();
-	}
-    });
+// load all models from this folder
+// NOTE: ignores back-up files (those with ~), and the current file 
+fs.readdirSync(__dirname + '/models/').filter(function(file) {
+ return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
+}).forEach(function(file) {
+ var model = sequelize["import"](path.join(__dirname + '/models/', file));
+ db[model.name] = model;
 });
+ 
+// add all the model objects into the database object
+Object.keys(db).forEach(function(modelName) {
+ if ("associate" in db[modelName]) {
+ db[modelName].associate(db);
+ }
+});
+ 
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+//var models = require('./models/');
+
+// TODO - move to another file
+db.User.hasMany(db.Nibble);
+//models.User.hasMany(models.Nibble);
+//models.Nibble.belongsTo(models.User);
+console.log(db.User);
+var user1 = db.User.create(
+    {
+	name: "Rachel Gardner",
+	bio: "Just some person.",
+	Nibbles:
+	[{
+	    title: "Intro to Giphy API",
+	    description: "A nibble",
+	    num_downloads: 2435,
+	    rating: 4,
+	    difficulty: 3
+	}]
+
+    },
+    {
+	include: [db.Nibble]
+    }
+);
+
+var user2 = db.User.create(
+    {
+	name: "Michelle Park",
+	bio: "A really cool person.",
+	Nibbles: 
+	[{
+	    title: "Python!",
+	    description: "Another nibble",
+	    num_downloads: 2435,
+	    rating: 4,
+	    difficulty: 3
+	}]
+    },
+    {
+	include: [db.Nibble]
+    }
+);
+
+/*
+user1.addNibble(nibble1).then(function(){
+    console.log("Added nibble1 to user1!");
+});
+*/
+

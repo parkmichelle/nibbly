@@ -8,6 +8,7 @@ cs142App.controller('SearchResultController', ['$scope', '$resource',
 	});
 	
 	Nibbles.get(function(nibbles) {
+	    console.log(nibbles);
 	    $scope.data = nibbles;
 	});
     }]
