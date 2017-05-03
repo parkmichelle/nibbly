@@ -1,0 +1,35 @@
+<!-- title -->
+<div class="upload-flex-container">
+	<div class="upload-title">
+	  New Nibbly
+	</div>
+	<form name="loginForm" class="upload-form">
+  	<md-input-container class="md-block">
+      <label>Title</label>
+      <input ng-model="title">
+    </md-input-container>
+		<md-select ng-model="subject" placeholder="Subject" class="md-block">
+          <md-option value="java">Java</md-option>
+          <md-option value="c++">C++</md-option>
+          <md-option value="python">Python</md-option>
+    </md-select>
+		<md-input-container class="md-block">
+        <label>Duration</label>
+        <input type="number" step="any" ng-pattern="/^1234$/" ng-model="duraction">
+    </md-input-container>
+		<input class="ng-hide" id="input-file-id" multiple type="file" />
+		<label for="input-file-id" class="md-button md-raised">Choose Files</label>
+		<br><br><br>
+
+		<br><br>
+		<md-radio-group class="upload-radio-buttons md-block" ng-model="difficulties">
+			<label>Difficulty:</label>
+      <md-radio-button value="beginner">Beginner</md-radio-button>
+      <md-radio-button value="intermediate">Intermediate</md-radio-button>
+      <md-radio-button value="expert">Expert</md-radio-button>
+    </md-radio-group>
+		<section layout="row" class="upload-button">
+			<md-button class="md-raised md-primary" ng-click="login(username, password)">Create</md-button>
+		</section>
+	</form>
+</div>

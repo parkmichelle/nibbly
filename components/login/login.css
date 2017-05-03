@@ -1,0 +1,28 @@
+.login-title {
+	font-size: 35px;
+	color: #6b6b6b;
+	font-family: "Roboto";
+	font-weight: 100;
+}
+
+.login-flex-container {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: 80vh;
+}
+
+.login-form {
+	width: 35%;
+}
+
+.login-input {
+	margin-top: 20px;
+}
+
+.login-buttons {
+	display: flex;
+	justify-content: center;
+}

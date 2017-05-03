@@ -1,15 +1,6 @@
 'use strict';
 
-/*
-// begin sketch code
-models.sequelize.sync().then(function() {
- var server = app.listen(app.get('port'), function() {
- console.log('Express server listening on port ' + server.address().port);
- });
-});
-// end sketch code
-*/
-var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource']);
+var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource', 'ngCookies']);
 
 cs142App.config(['$routeProvider',
     function ($routeProvider) {
@@ -26,13 +17,28 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/search-result/search-resultTemplate.html',
                 controller: 'SearchResultController'
             }).
+            when('/login', {
+                templateUrl: 'components/login/loginTemplate.html',
+                controller: 'LoginController'
+            }).
+            when('/upload', {
+                templateUrl: 'components/upload/uploadTemplate.html',
+                controller: 'UploadController'
+            }).
             otherwise({
                 redirectTo: '/home'
             });
     }]);
 
-cs142App.controller('MainController', ['$scope', '$location', '$resource',
-    function ($scope, $location, $resource) {
+cs142App.controller('MainController', ['$scope', '$location', '$resource', '$cookieStore',
+    function ($scope, $location, $resource, $cookieStore) {
         $scope.main = {};
         $scope.main.title = 'Nibbly';
+        $scope.main.loginUser = $cookieStore.get("loginUser");
+
+        $scope.logout = function() {
+          $scope.main.loginUser = undefined;
+          $location.path("/home");
+          $cookieStore.remove("loginUser");
+        }
     }]);
