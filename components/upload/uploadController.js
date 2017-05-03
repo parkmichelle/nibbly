@@ -16,8 +16,8 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
         // TODO: show error message
         $scope.errorMessage = "Oops! You're missing a required parameter."
       } else {
-        // all parameters are filled, create nibble
-        
+        // all parameters are filled, create nibble and push
+
       }
     };
 
