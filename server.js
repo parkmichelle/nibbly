@@ -65,7 +65,7 @@ app.get('/nibble/:id', function(req, res) {
     });
 });
 
-app.post('/nibble', function(req, res) {
+app.post('/nibble/new', function(req, res) {
     Nibble.create({
 	title: req.body.title,
 	description: req.body.description
