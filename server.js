@@ -57,6 +57,18 @@ app.get('/list/nibbles', function(req, res) {
     });
 });
 
+// get featured nibbles
+app.get('/list/featured', function(req, res) {
+    Nibble.findAll({
+	where : {featured: true},
+	include : [User, Content],
+	order: [['rating', 'DESC']],
+	limit: 5
+    }).then(function(nibbles) {
+	res.json(nibbles);
+    });
+});
+
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;

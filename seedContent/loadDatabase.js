@@ -6,16 +6,17 @@ var Sequelize = require("sequelize");
 var env = process.env.NODE_ENV || "development";
 
 // pull database config info from config.json
-var config = require(__dirname + '/config/config.json')[env];
+var config = require(path.join(__dirname,'../config/config.json'))[env];
+config['logging'] = false;
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 var db = {};
 
 // load all models from this folder
 // NOTE: ignores back-up files (those with ~), and the current file 
-fs.readdirSync(__dirname + '/models/').filter(function(file) {
+fs.readdirSync(path.join(__dirname,'../models/')).filter(function(file) {
  return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
- var model = sequelize["import"](path.join(__dirname + '/models/', file));
+ var model = sequelize["import"](path.join(__dirname,'../models/', file));
  db[model.name] = model;
 });
  
@@ -39,8 +40,10 @@ db.Nibble.belongsTo(db.User);
 db.Nibble.hasMany(db.Content);
 db.Content.belongsTo(db.Nibble);
 
-var fs = require('fs')
+// load all of the test data
+require('./testData.js')(db);
 
+/*
 var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', function(err,data){
     if(err){
 	throw err;
@@ -53,6 +56,7 @@ var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', funct
 	    num_downloads: 2435,
 	    rating: 4,
 	    difficulty: 3,
+	    featured: true,
 	    Contents: [{
 		title: "Giphy Slides",
 		file : data
@@ -84,6 +88,7 @@ var user2 = db.User.create(
 	    title: "Python!",
 	    description: "Another nibble",
 	    num_downloads: 2435,
+	    featured: true,
 	    rating: 4,
 	    difficulty: 3
 	}]
@@ -92,11 +97,4 @@ var user2 = db.User.create(
 	include: [db.Nibble]
     }
 );
-
-/*
-user1.addNibble(nibble1).then(function(){
-    console.log("Added nibble1 to user1!");
-});
 */
-
-
