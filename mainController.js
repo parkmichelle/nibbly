@@ -13,7 +13,7 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/nibble-detail/nibble-detailTemplate.html',
                 controller: 'NibbleDetailController'
             }).
-            when('/search', {
+            when('/search/:query', {
                 templateUrl: 'components/search-result/search-resultTemplate.html',
                 controller: 'SearchResultController'
             }).
