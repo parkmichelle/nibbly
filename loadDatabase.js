@@ -29,8 +29,6 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-//var models = require('./models/');
-
 // TODO - move to another file
 
 db.User.hasMany(db.Nibble);
@@ -43,8 +41,7 @@ db.Content.belongsTo(db.Nibble);
 
 var fs = require('fs')
 
-//var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', function(err,data){
-var giphySlides = fs.readFile(__dirname + '/seedContent/test.txt', function(err,data){
+var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', function(err,data){
     if(err){
 	throw err;
     }

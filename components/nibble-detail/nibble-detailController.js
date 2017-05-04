@@ -10,16 +10,8 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
       var Nibble = $resource('/nibble/:id', {id: '@id'});
 
-      console.log(Nibble);
-
       Nibble.get({id: currNibbleId}, function(nibble) {
 	  $scope.currNibble = nibble;
-	  console.log(nibble.Contents);
-	  var file = nibble.Contents.file;
-	  if (file != null) {
-	      $scope.downloadUrl = (window.URL || window.webkitURL).createObjectURL(nibble.Contents.file);
-	      console.log($scope.downloadURL);
-	  }
       });
 
       // Get the modal
@@ -33,21 +25,15 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
     // When the user clicks on the button, open the modal 
     btn.onclick = function() {
+	var byteArray = new Uint8Array($scope.currNibble.Contents[0].file.data);
+	var myBlob = new Blob([byteArray], { type: 'application/octet-stream' });
 
-	var myBlob = new Blob([$scope.currNibble.Contents[0].file.data], {type : ""});
 	var hiddenElement = document.createElement('a');
-//	var mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation/';
-//	var mimeType = 'data:text/plain,';
-	var mimeType = '';
-	console.log($scope.currNibble);
-//	hiddenElement.href = mimeType + encodeURI($scope.currNibble.Contents[0].file);
-	hiddenElement.href = mimeType + encodeURI(myBlob);
-	console.log("HREF: " + hiddenElement.href);
+	hiddenElement.href = window.URL.createObjectURL(myBlob);
 	hiddenElement.target = '_blank';
 	hiddenElement.download = 'myFile.txt';
 	hiddenElement.click();
-
-//        modal.style.display = "block";
+        modal.style.display = "block";
     }
 
     // When the user clicks on <span> (x), close the modal
