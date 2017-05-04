@@ -26,6 +26,7 @@ var ContentType = models.ContentType;
 
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 
 /* create a relation such that each user
    can have many nibbles (automatically handles
@@ -39,6 +40,7 @@ Content.hasOne(ContentType);
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
 app.use(express.static(__dirname));
+app.use(bodyParser.json());
 
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
@@ -63,15 +65,16 @@ app.get('/nibble/:id', function(req, res) {
 });
 
 app.post('/nibble/new', function(req, res) {
-    Nibble.create({
-	title: req.body.title,
-	description: req.body.description
-    }).then(function(nibbles){
-	res.json(nibbles.dataValues);
-    }).catch(function(error){
-	console.log("ops: " + error);
-	res.status(500).json({error: 'error'});
-    });
+  console.log(req.body);
+  Nibble.create({
+    title: req.body.title,
+	  description: req.body.description
+  }).then(function(nibbles){
+    res.json(nibbles.dataValues);
+  }).catch(function(error){
+    console.log("ops: " + error);
+    res.status(500).json({error: 'error'});
+  });
 });
 
 var server = app.listen(3000, function () {
