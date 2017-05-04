@@ -33,8 +33,11 @@ var app = express();
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
+
+//Content.hasOne(ContentType);
+
 Nibble.hasMany(Content);
-Content.hasOne(ContentType);
+Content.belongsTo(Nibble);
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.

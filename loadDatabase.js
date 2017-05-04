@@ -33,36 +33,50 @@ db.Sequelize = Sequelize;
 
 // TODO - move to another file
 
-User.hasMany(Nibble);
-Nibble.belongsTo(User);
-Nibble.hasMany(Content);
-Content.hasOne(ContentType);
+db.User.hasMany(db.Nibble);
+db.Nibble.belongsTo(db.User);
 
-var giphySlides = FS.readFileSync(__dirname + '\seedContent\GiphySlides.ppt');
+//db.Content.hasOne(db.ContentType);
 
-var user1 = db.User.create(
-    {
-	name: "Rachel Gardner",
-	bio: "Just some person.",
-	Nibbles:
-	[{
+db.Nibble.hasMany(db.Content);
+db.Content.belongsTo(db.Nibble);
+
+var fs = require('fs')
+
+//var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', function(err,data){
+var giphySlides = fs.readFile(__dirname + '/seedContent/test.txt', function(err,data){
+    if(err){
+	throw err;
+    }
+
+    var nibble1 = db.Nibble.create(
+	{
 	    title: "Intro to Giphy API",
 	    description: "A nibble",
 	    num_downloads: 2435,
 	    rating: 4,
 	    difficulty: 3,
-	    Content:
-	    [{
+	    Contents: [{
 		title: "Giphy Slides",
-		file : giphySlides
+		file : data
 	    }]
-	}]
-
-    },
-    {
-	include: [db.Nibble]
-    }
-);
+	},
+	{
+	    include: [db.Content]
+	}
+    ).then(function(nibble){
+	return db.User.create(
+	    {
+		name: "Rachel Gardner",
+		bio: "Just some person."
+	    }
+	).then(function(user){
+	    return user.addNibble(nibble).then(function(){
+		console.log("added nibble");
+	    });
+	});
+    });
+});
 
 var user2 = db.User.create(
     {
@@ -87,4 +101,5 @@ user1.addNibble(nibble1).then(function(){
     console.log("Added nibble1 to user1!");
 });
 */
+
 
