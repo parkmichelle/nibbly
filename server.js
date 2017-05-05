@@ -69,8 +69,10 @@ app.post('/nibble/new', function(req, res) {
   Nibble.create({
     title: req.body.title,
 	  description: req.body.description
-  }).then(function(nibbles){
-    res.json(nibbles.dataValues);
+  }).then(function(nibble){
+    nibble.setUser(1).then(function(user) {
+      res.json(nibble.dataValues);
+    });
   }).catch(function(error){
     console.log("ops: " + error);
     res.status(500).json({error: 'error'});

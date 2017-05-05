@@ -6,7 +6,7 @@ cs142App.controller('LoginController', ['$scope', '$routeParams', '$resource', '
 
     $scope.login = function(username, password) {
       var user = {username: username, password: password, _id: 1234};
-      if (username === "took") {
+      if (username === "test") {
         $scope.main.loginUser = user;
         $location.path("/home");
         $cookieStore.put("loginUser", user);

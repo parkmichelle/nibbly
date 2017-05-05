@@ -39,8 +39,8 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
     // Upload the photo file selected by the user using a post request to the URL /photos/new
     $scope.createNibbleClick = function (username) {
         // check all parameters filled
-        if (!($scope.uploadNibble.title && $scope.uploadNibble.subject
-          && $scope.uploadNibble.duration && $scope.uploadNibble.difficulty)) {
+        if (!$scope.uploadNibble.title || !$scope.uploadNibble.description) {
+          console.log($scope.uploadNibble)
             console.error("uploadNibble called without all parameters filled");
             $scope.errorMessage = "Oops! You're missing a required parameter."
             $scope.uploadErr = "No file selected!";
