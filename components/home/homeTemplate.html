@@ -19,8 +19,8 @@
 	<div class="home-featured-container">
   		<div class="home-featured-tile" ng-repeat="item in featuredNibbles">
   			<div class="home-featured-nibble">
-	            <a href="#/nibble-detail/{{item._id}}">{{item.title}}</a>
-	            <h4>By {{item.author}}</h4>
+	            <a href="#/nibble-detail/{{item.id}}">{{item.title}}</a>
+	            <h4>By {{item.User.name}}</h4>
 	            <div class="all-search-result-bottom">
 	                <span>{{item.numDownloads}}</span>
 	                <span>{{item.rating}} stars</span>
