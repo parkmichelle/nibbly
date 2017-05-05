@@ -70,9 +70,7 @@ app.post('/nibble/new', function(req, res) {
     title: req.body.title,
 	  description: req.body.description
   }).then(function(nibble){
-    nibble.setUser(1).then(function(user) {
-      res.json(nibble.dataValues);
-    });
+    res.json(nibble.dataValues);
   }).catch(function(error){
     console.log("ops: " + error);
     res.status(500).json({error: 'error'});
