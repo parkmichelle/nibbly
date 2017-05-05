@@ -87,7 +87,7 @@ var user2 = db.User.create(
 	    title: "Python!",
 	    description: "Another nibble",
 	    num_downloads: 2435,
-	    rating: 4,
+	    rating: 2,
 	    difficulty: 3
 	}]
     },

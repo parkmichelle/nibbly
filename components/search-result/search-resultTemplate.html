@@ -37,7 +37,7 @@
       <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="All">
         <md-content class="md-padding">
-          <div class="all-search-result" ng-repeat="item in data | filter: { title: searchQuery }">
+          <div class="all-search-result" ng-repeat="item in data | filter: { title: searchQuery } | orderBy : 'rating' : true">
             <div class="all-search-result-tile">
 	      <a href="#/nibble-detail/{{item.id}}">
 		      <h3>{{item.title}}</h3>
