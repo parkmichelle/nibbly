@@ -88,7 +88,7 @@ app.post('/nibble/new', function(req, res) {
             title: filename,
             file: req.file
           }).then(function(content){
-            // fill in?
+            res.end();
           }).catch(function(error){
             console.log("ops: " + error);
             res.status(500).json({error: 'error'});
