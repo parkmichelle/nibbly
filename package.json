@@ -9,6 +9,7 @@
   "author": "Mendel Rosenblum <mendel@cs.stanford.edu> (http://www.stanford.edu/~mendel)",
   "license": "ISC",
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "angular": "1.5.11",
     "angular-animate": "1.5.11",
     "angular-annotorious": "^1.0.7",
@@ -26,6 +27,7 @@
     "crypto": "0.0.3",
     "express": "^4.13.3",
     "express-session": "^1.13.0",
+    "express-zip": "^2.0.1",
     "faker": "^3.0.1",
     "jshint": "^2.9.1-rc2",
     "ment.io": "^0.9.23",

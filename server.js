@@ -72,8 +72,31 @@ app.get('/list/featured', function(req, res) {
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
-    Nibble.findById(id, {include:[User, Content]}).then(function(nibbles) {
-	res.json(nibbles);
+    Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	res.json(nibble);
+    });
+});
+
+app.get('/download/nibble/:id',function(req,res){	
+    console.log("made it 0");
+    var id = req.params.id;
+    Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	for (var i = 0; i < nibble.Contents.length; i++){
+	    var byteArray = new Buffer(nibble.Contents[i].file);
+	    var AdmZip = require('adm-zip');
+	    var zip = new AdmZip();
+	    console.log(nibble.Contents[i]);
+	    zip.addFile(nibble.Contents[i].title + ".ppt", byteArray, '', parseInt('0644', 8) << 16);
+	}
+
+	// get everything as a buffer 
+	var zipped = zip.toBuffer();
+
+	res.writeHead(200, {
+            'Content-Type': 'application/octet-stream',
+            'Content-disposition': 'attachment;filename=' + 'test.zip',
+	});
+	res.end(new Buffer(zipped, 'binary'));
     });
 });
 
