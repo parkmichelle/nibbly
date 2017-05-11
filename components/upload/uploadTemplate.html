@@ -8,27 +8,14 @@
       <label>Title</label>
       <input ng-model="uploadNibble.title">
     </md-input-container>
-		<md-select ng-model="uploadNibble.subject" placeholder="Subject" class="md-block">
-          <md-option value="java">Java</md-option>
-          <md-option value="c++">C++</md-option>
-          <md-option value="python">Python</md-option>
-    </md-select>
 		<md-input-container class="md-block">
-        <label>Duration</label>
-        <input type="number" step="any" ng-model="uploadNibble.duration">
+        <label>Description</label>
+        <textarea ng-model="uploadNibble.description" rows="6"></textarea>
     </md-input-container>
     	<input id="cs142-upload-photo-choose-file" type="file" accept="image/*"  onchange="angular.element(this).scope().inputFileNameChanged(this)">
 <!-- 		<input class="ng-hide" id="input-file-id" multiple type="file" />
 		<label for="input-file-id" class="md-button md-raised">Choose Files</label> -->
 		<br><br><br>
-
-		<br><br>
-		<md-radio-group class="upload-radio-buttons md-block" ng-model="uploadNibble.difficulty">
-			<label>Difficulty:</label>
-      <md-radio-button value="beginner">Beginner</md-radio-button>
-      <md-radio-button value="intermediate">Intermediate</md-radio-button>
-      <md-radio-button value="expert">Expert</md-radio-button>
-    </md-radio-group>
     <p class="upload-error-msg">{{errorMessage}}</p>
 		<section layout="row" class="upload-button">
 			<md-button class="md-raised md-primary" ng-click="createNibbleClick(username)">Create</md-button>

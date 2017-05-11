@@ -1,5 +1,5 @@
 "use strict";
- 
+
 var fs = require("fs");
 var path = require("path");
 var Sequelize = require("sequelize");
@@ -12,21 +12,26 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
 var db = {};
 
 // load all models from this folder
-// NOTE: ignores back-up files (those with ~), and the current file 
+<<<<<<< HEAD:loadDatabase.js
+// NOTE: ignores back-up files (those with ~), and the current file
+fs.readdirSync(__dirname + '/models/').filter(function(file) {
+=======
+// NOTE: ignores back-up files (those with ~), and the current file
 fs.readdirSync(path.join(__dirname,'../models/')).filter(function(file) {
+>>>>>>> master:seedContent/loadDatabase.js
  return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
  var model = sequelize["import"](path.join(__dirname,'../models/', file));
  db[model.name] = model;
 });
- 
+
 // add all the model objects into the database object
 Object.keys(db).forEach(function(modelName) {
  if ("associate" in db[modelName]) {
  db[modelName].associate(db);
  }
 });
- 
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
@@ -83,17 +88,13 @@ var user2 = db.User.create(
     {
 	name: "Michelle Park",
 	bio: "A really cool person.",
-	Nibbles: 
+	Nibbles:
 	[{
 	    title: "Python!",
 	    description: "Another nibble",
 	    num_downloads: 2435,
-<<<<<<< HEAD:loadDatabase.js
-	    rating: 2,
-=======
 	    featured: true,
 	    rating: 4,
->>>>>>> 8fb2f5f49768a53aa8a274d6aa76f23927211111:seedContent/loadDatabase.js
 	    difficulty: 3
 	}]
     },

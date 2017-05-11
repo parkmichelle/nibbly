@@ -46,7 +46,7 @@
 
         <md-toolbar class="main-toolbar" layout="row">
           <a class="home-toolbar-anchor" href="#/home"><p>nibbly</p></a>
-          <a class="home-toolbar-anchor" href="#/upload"><p>Upload</p></a>
+          <a class="home-toolbar-anchor" ng-if="main.loginUser" href="#/upload"><p>Upload</p></a>
           <a class="home-toolbar-anchor" href="#/login" ng-if="!main.loginUser && main.location !== 'login'"><p>Login</p></a>
           <a ng-if="main.loginUser" ng-click="logout()">Logout</a>
           <a class="avatar" ng-if="main.loginUser">{{main.loginUser.username[0]}}</a>

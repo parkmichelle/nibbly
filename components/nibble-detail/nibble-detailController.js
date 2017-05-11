@@ -11,7 +11,7 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
       var Nibble = $resource('/nibble/:id', {id: '@id'});
 
       Nibble.get({id: currNibbleId}, function(nibble) {
-	  $scope.currNibble = nibble;
+	       $scope.currNibble = nibble;
       });
 
       // Get the modal
@@ -23,7 +23,7 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on the button, open the modal 
+    // When the user clicks on the button, open the modal
     btn.onclick = function() {
 	var byteArray = new Uint8Array($scope.currNibble.Contents[0].file.data);
 	var myBlob = new Blob([byteArray], { type: 'application/octet-stream' });
