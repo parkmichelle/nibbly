@@ -1,7 +1,9 @@
 <!-- header -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <div class="nibble-detail-header">
 	<span class="nibble-detail-title">{{currNibble.title}}</span>
-	<img id="nibble-detail-download-button" ng-src="/components/nibble-detail/nibble-detailImages/icon-download.png">
+	<a href="/download/nibble/{{currNibble.id}}"><img id="nibble-detail-download-button" ng-src="/components/nibble-detail/nibble-detailImages/icon-download.png"></a>
 </div>
 <!-- download modal -->
 <div id="myModal" class="modal">
@@ -27,6 +29,7 @@
 		<h2>Slides</h2>
 		<div class="nibble-detail-slide-view">
 			<!-- TODO: ng-repeat it from db -->
+			<ng-embed embed-data="{{pdf-data}}" embed-options="{{embed-options}}"></ng-embed>
 			<img class="nibble-detail-slide-img" ng-src="/components/nibble-detail/nibble-detailImages/testnibble_1.png">
 		</div>
 	</span>

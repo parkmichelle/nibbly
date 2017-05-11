@@ -54,6 +54,28 @@ module.exports = function(db) {
 	}
     ).then(function(user2){
 	console.log("added user2, nibble2");
+	var data2 = fs.readFile(__dirname + '/CS_Beyond_the_AP.pptx', function(err,data){
+	    var nibble3 = db.Nibble.create(
+		{
+		    title: "CS Beyond the AP",
+		    description: "A quick overview of college CS.",
+		    num_downloads: 1703,
+		    rating: 3,
+		    difficulty: 3,
+		    Contents: [{
+			title: "CS Beyond the AP",
+			file : data2
+		    }]
+		},
+		{
+		    include: [db.Content]
+		}
+	    ).then(function(nibble){
+		user2.addNibble(nibble);
+		//	nibble3.addUser(user2);
+	    });
     });
+
+});
 };
 
