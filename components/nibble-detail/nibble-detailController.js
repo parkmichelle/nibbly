@@ -10,8 +10,6 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
       var Nibble = $resource('/nibble/:id', {id: '@id'});
 
-      console.log(Nibble);
-
       Nibble.get({id: currNibbleId}, function(nibble) {
 	       $scope.currNibble = nibble;
       });

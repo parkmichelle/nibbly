@@ -40,8 +40,11 @@ var app = express();
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
+
+//Content.hasOne(ContentType);
+
 Nibble.hasMany(Content);
-Content.hasOne(ContentType);
+Content.belongsTo(Nibble);
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -62,11 +65,46 @@ app.get('/list/nibbles', function(req, res) {
     });
 });
 
+// get featured nibbles
+app.get('/list/featured', function(req, res) {
+    Nibble.findAll({
+	where : {featured: true},
+	include : [User, Content],
+	order: [['rating', 'DESC']],
+	limit: 5
+    }).then(function(nibbles) {
+	res.json(nibbles);
+    });
+});
+
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
-    Nibble.findById(id, {include:[User, Content]}).then(function(nibbles) {
-	res.json(nibbles);
+    Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	res.json(nibble);
+    });
+});
+
+app.get('/download/nibble/:id',function(req,res){	
+    console.log("made it 0");
+    var id = req.params.id;
+    Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	for (var i = 0; i < nibble.Contents.length; i++){
+	    var byteArray = new Buffer(nibble.Contents[i].file);
+	    var AdmZip = require('adm-zip');
+	    var zip = new AdmZip();
+	    console.log(nibble.Contents[i]);
+	    zip.addFile(nibble.Contents[i].title + ".ppt", byteArray, '', parseInt('0644', 8) << 16);
+	}
+
+	// get everything as a buffer 
+	var zipped = zip.toBuffer();
+
+	res.writeHead(200, {
+            'Content-Type': 'application/octet-stream',
+            'Content-disposition': 'attachment;filename=' + 'test.zip',
+	});
+	res.end(new Buffer(zipped, 'binary'));
     });
 });
 

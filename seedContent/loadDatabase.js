@@ -6,16 +6,22 @@ var Sequelize = require("sequelize");
 var env = process.env.NODE_ENV || "development";
 
 // pull database config info from config.json
-var config = require(__dirname + '/../config/config.json')[env];
+var config = require(path.join(__dirname,'../config/config.json'))[env];
+config['logging'] = false;
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 var db = {};
 
 // load all models from this folder
+<<<<<<< HEAD:loadDatabase.js
 // NOTE: ignores back-up files (those with ~), and the current file
-fs.readdirSync(__dirname).filter(function(file) {
+fs.readdirSync(__dirname + '/models/').filter(function(file) {
+=======
+// NOTE: ignores back-up files (those with ~), and the current file
+fs.readdirSync(path.join(__dirname,'../models/')).filter(function(file) {
+>>>>>>> master:seedContent/loadDatabase.js
  return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
- var model = sequelize["import"](path.join(__dirname, file));
+ var model = sequelize["import"](path.join(__dirname,'../models/', file));
  db[model.name] = model;
 });
 
@@ -29,7 +35,7 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+// TODO - move to another file
 
 db.User.hasMany(db.Nibble);
 db.Nibble.belongsTo(db.User);
@@ -39,12 +45,5 @@ db.Nibble.belongsTo(db.User);
 db.Nibble.hasMany(db.Content);
 db.Content.belongsTo(db.Nibble);
 
-var models = require('./');
-models.sequelize
-    .sync({force: true})
-    .then(function () {
-	console.log('Connection successful');
-    })
-    .catch(function(error) {
-	console.log("Error creating connection:", error);
-    });
+// load all of the test data
+require('./testData.js')(db);
