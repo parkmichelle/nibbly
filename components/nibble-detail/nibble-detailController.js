@@ -10,8 +10,6 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
       var Nibble = $resource('/nibble/:id', {id: '@id'});
 
-      console.log(Nibble);
-
       Nibble.get({id: currNibbleId}, function(nibble) {
 	       $scope.currNibble = nibble;
       });
@@ -27,6 +25,14 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
     // When the user clicks on the button, open the modal
     btn.onclick = function() {
+	var byteArray = new Uint8Array($scope.currNibble.Contents[0].file.data);
+	var myBlob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+	var hiddenElement = document.createElement('a');
+	hiddenElement.href = window.URL.createObjectURL(myBlob);
+	hiddenElement.target = '_blank';
+	hiddenElement.download = 'myFile.txt';
+	hiddenElement.click();
         modal.style.display = "block";
     }
 

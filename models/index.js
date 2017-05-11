@@ -31,6 +31,14 @@ db.Sequelize = Sequelize;
 
 module.exports = db;
 
+db.User.hasMany(db.Nibble);
+db.Nibble.belongsTo(db.User);
+
+//db.Content.hasOne(db.ContentType);
+
+db.Nibble.hasMany(db.Content);
+db.Content.belongsTo(db.Nibble);
+
 var models = require('./');
 models.sequelize
     .sync({force: true})

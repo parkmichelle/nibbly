@@ -34,8 +34,11 @@ var bodyParser = require('body-parser');
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
+
+//Content.hasOne(ContentType);
+
 Nibble.hasMany(Content);
-Content.hasOne(ContentType);
+Content.belongsTo(Nibble);
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -51,6 +54,18 @@ app.get('/list/nibbles', function(req, res) {
     Nibble.findAll({
 	where : {},
 	include : [User, Content]
+    }).then(function(nibbles) {
+	res.json(nibbles);
+    });
+});
+
+// get featured nibbles
+app.get('/list/featured', function(req, res) {
+    Nibble.findAll({
+	where : {featured: true},
+	include : [User, Content],
+	order: [['rating', 'DESC']],
+	limit: 5
     }).then(function(nibbles) {
 	res.json(nibbles);
     });

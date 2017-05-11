@@ -1,6 +1,6 @@
-<div ng-controller="SearchResultController" ng-init="query='API'">
+<div ng-controller="SearchResultController">
 <div class="search-bar-container">
-  <input type="text" placeholder="Search..." class="search-bar" ng-model="query">
+  <input type="text" placeholder="Search..." class="search-bar" ng-model="searchQuery">
 </div>
 
 <div layout="column" style="height:500px;">
@@ -37,7 +37,7 @@
       <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="All">
         <md-content class="md-padding">
-          <div class="all-search-result" ng-repeat="item in data">
+          <div class="all-search-result" ng-repeat="item in data | filter: { title: searchQuery } | orderBy : 'rating' : true">
             <div class="all-search-result-tile">
 	      <a href="#/nibble-detail/{{item.id}}">
 		      <h3>{{item.title}}</h3>

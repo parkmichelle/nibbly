@@ -6,16 +6,22 @@ var Sequelize = require("sequelize");
 var env = process.env.NODE_ENV || "development";
 
 // pull database config info from config.json
-var config = require(__dirname + '/config/config.json')[env];
+var config = require(path.join(__dirname,'../config/config.json'))[env];
+config['logging'] = false;
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 var db = {};
 
 // load all models from this folder
+<<<<<<< HEAD:loadDatabase.js
 // NOTE: ignores back-up files (those with ~), and the current file
 fs.readdirSync(__dirname + '/models/').filter(function(file) {
+=======
+// NOTE: ignores back-up files (those with ~), and the current file
+fs.readdirSync(path.join(__dirname,'../models/')).filter(function(file) {
+>>>>>>> master:seedContent/loadDatabase.js
  return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
- var model = sequelize["import"](path.join(__dirname + '/models/', file));
+ var model = sequelize["import"](path.join(__dirname,'../models/', file));
  db[model.name] = model;
 });
 
@@ -29,40 +35,54 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-//var models = require('./models/');
-
 // TODO - move to another file
 
-User.hasMany(Nibble);
-Nibble.belongsTo(User);
-Nibble.hasMany(Content);
-Content.hasOne(ContentType);
+db.User.hasMany(db.Nibble);
+db.Nibble.belongsTo(db.User);
 
-var giphySlides = FS.readFileSync(__dirname + '\seedContent\GiphySlides.ppt');
+//db.Content.hasOne(db.ContentType);
 
-var user1 = db.User.create(
-    {
-	name: "Rachel Gardner",
-	bio: "Just some person.",
-	Nibbles:
-	[{
+db.Nibble.hasMany(db.Content);
+db.Content.belongsTo(db.Nibble);
+
+// load all of the test data
+require('./testData.js')(db);
+
+/*
+var giphySlides = fs.readFile(__dirname + '/seedContent/GiphySlides.pptx', function(err,data){
+    if(err){
+	throw err;
+    }
+
+    var nibble1 = db.Nibble.create(
+	{
 	    title: "Intro to Giphy API",
 	    description: "A nibble",
 	    num_downloads: 2435,
 	    rating: 4,
 	    difficulty: 3,
-	    Content:
-	    [{
+	    featured: true,
+	    Contents: [{
 		title: "Giphy Slides",
-		file : giphySlides
+		file : data
 	    }]
-	}]
-
-    },
-    {
-	include: [db.Nibble]
-    }
-);
+	},
+	{
+	    include: [db.Content]
+	}
+    ).then(function(nibble){
+	return db.User.create(
+	    {
+		name: "Rachel Gardner",
+		bio: "Just some person."
+	    }
+	).then(function(user){
+	    return user.addNibble(nibble).then(function(){
+		console.log("added nibble");
+	    });
+	});
+    });
+});
 
 var user2 = db.User.create(
     {
@@ -73,6 +93,7 @@ var user2 = db.User.create(
 	    title: "Python!",
 	    description: "Another nibble",
 	    num_downloads: 2435,
+	    featured: true,
 	    rating: 4,
 	    difficulty: 3
 	}]
@@ -81,9 +102,4 @@ var user2 = db.User.create(
 	include: [db.Nibble]
     }
 );
-
-/*
-user1.addNibble(nibble1).then(function(){
-    console.log("Added nibble1 to user1!");
-});
 */
