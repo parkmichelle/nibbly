@@ -40,36 +40,37 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
     $scope.createNibbleClick = function (username) {
         // check all parameters filled
         if (!$scope.uploadNibble.title || !$scope.uploadNibble.description) {
-          console.log($scope.uploadNibble)
+            console.log($scope.uploadNibble);
             console.error("uploadNibble called without all parameters filled");
             $scope.errorMessage = "Oops! You're missing a required parameter."
             $scope.uploadErr = "No file selected!";
             return;
         }
 
-        console.log($scope.uploadNibble);
+        console.log('fileSubmitted', selectedFile);
+        
+        // Create a DOM form and add the file
+        var domForm = new FormData();
+        domForm.append('uploadedfile', selectedFile);
+        domForm.append('title', $scope.uploadNibble.title);
+        domForm.append('description', $scope.uploadNibble.description);
+        
+        // Using $http to POST the form
+        $http.post('/nibble/new', domForm, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).success(function(newNibble){
+            // The photo was successfully uploaded. - change location to go to that nibble or user's home page
+            $location.path("/home");
+        }).error(function(err){
+            // Couldn't upload the photo. XXX  - Do whatever you want on failure.
+            console.error('ERROR uploading file', err);
+        });
 
-        Nibble.save($scope.uploadNibble, function(nibble) {
-          $location.path("/nibble-detail/" + nibble.id);
-        }, function(err) {});
+        // console.log($scope.uploadNibble);
 
-        // console.log('fileSubmitted', selectedFile);
-        //
-        // // Create a DOM form and add the file
-        // var domForm = new FormData();
-        // domForm.append('uploadedphoto', selectedFile);
-        // // TODO: append rest of nibble stuff here
-        //
-        // // Using $http to POST the form
-        // $http.post('/nibble/new', domForm, {
-        //     transformRequest: angular.identity,
-        //     headers: {'Content-Type': undefined}
-        // }).success(function(newPhoto){
-        //     // The photo was successfully uploaded. - change location to go to that nibble or user's home page
-        //     $location.path("/home");
-        // }).error(function(err){
-        //     // Couldn't upload the photo. XXX  - Do whatever you want on failure.
-        //     console.error('ERROR uploading file', err);
-        // });
+        // Nibble.save($scope.uploadNibble, function(nibble) {
+        //   $location.path("/nibble-detail/" + nibble.id);
+        // }, function(err) {});
     };
   }]);

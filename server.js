@@ -28,6 +28,12 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
+var multer = require('multer');
+var processFormBody = multer({storage: multer.memoryStorage()}).single('uploadedfile');
+
+var express = require('express');
+var app = express();
+
 /* create a relation such that each user
    can have many nibbles (automatically handles
    creation of foreign keys
@@ -103,17 +109,34 @@ app.get('/download/nibble/:id',function(req,res){
 });
 
 app.post('/nibble/new', function(req, res) {
-  console.log(req.body);
-  Nibble.create({
-    title: req.body.title,
-	  description: req.body.description
-  }).then(function(nibble){
-    res.json(nibble.dataValues);
-  }).catch(function(error){
-    console.log("ops: " + error);
-    res.status(500).json({error: 'error'});
+  processFormBody(req, res, function (err) {
+      console.log("req file is ", req.file);
+      var timestamp = new Date().valueOf();
+      var filename = String(timestamp) + req.file.originalname;
+      console.log("new filename is ", filename);
+
+        Nibble.create({
+          title: req.body.title,
+          description: req.body.description
+        }).then(function(nibble){
+          nibble.setUser(1).then(function(user) {
+            res.json(nibble.dataValues);
+          });
+          Content.create({
+            title: filename,
+            file: req.file
+          }).then(function(content){
+            res.end();
+          }).catch(function(error){
+            console.log("ops: " + error);
+            res.status(500).json({error: 'error'});
+          });
+        }).catch(function(error){
+          console.log("ops: " + error);
+          res.status(500).json({error: 'error'});
+        });
+    });
   });
-});
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
