@@ -38,6 +38,7 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
 
     // Upload the photo file selected by the user using a post request to the URL /photos/new
     $scope.createNibbleClick = function (username) {
+	console.log("GOT A CLICK");
         // check all parameters filled
         if (!$scope.uploadNibble.title || !$scope.uploadNibble.description) {
             console.log($scope.uploadNibble);

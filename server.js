@@ -119,18 +119,27 @@ app.post('/nibble/new', function(req, res) {
           title: req.body.title,
           description: req.body.description
         }).then(function(nibble){
-          nibble.setUser(1).then(function(user) {
-            res.json(nibble.dataValues);
-          });
-          Content.create({
-            title: filename,
-            file: req.file
-          }).then(function(content){
-            res.end();
-          }).catch(function(error){
-            console.log("ops: " + error);
-            res.status(500).json({error: 'error'});
-          });
+	    console.log(req.file);
+	    //	    var byteArray = new Buffer(req.file);
+	    var FileReader = require('filereader')
+	    var fileReader = new FileReader();
+//	    fileReader.readAsArrayBuffer(req.file);
+
+//	    fileReader.onload = function (event) {
+//		var byteArray = event.target.result;
+
+		Content.create({
+		    title: req.body.title,//filename,
+		    file: req.file["buffer"]
+		    //file: byteArray
+		}).then(function(content){
+		    content.setNibble(nibble);
+		    res.end();
+		}).catch(function(error){
+		    console.log("ops: " + error);
+		    res.status(500).json({error: 'error'});
+		});
+//	    };
         }).catch(function(error){
           console.log("ops: " + error);
           res.status(500).json({error: 'error'});
