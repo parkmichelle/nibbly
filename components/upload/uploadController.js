@@ -3,12 +3,6 @@
 cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', '$location', '$cookieStore', '$mdToast', '$http',
   function ($scope, $routeParams, $resource, $location, $cookieStore, $mdToast, $http) {
     $scope.uploadNibble = {};
-    // $scope.uploadNibble.title = "";
-    // $scope.uploadNibble.subject = "";
-    // $scope.uploadNibble.duration;
-    // $scope.uploadNibble.difficulty = "";
-    // $scope.uploadNibble.files = [];
-
     $scope.errorMessage = "";
 
     var Nibble = $resource('/nibble/new');
