@@ -10,10 +10,9 @@ module.exports = function(sequelize, DataTypes) {
      file : {
 	 type : DataTypes.BLOB,
      },
-/*
      fileName : {
 	 type : DataTypes.STRING,
-     },*/
+     },
      notes : {
 	 type : DataTypes.STRING,
      }

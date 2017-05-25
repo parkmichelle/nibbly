@@ -90,11 +90,12 @@ app.get('/download/nibble/:id',function(req,res){
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	for (var i = 0; i < nibble.Contents.length; i++){
+	    console.log("about to download:", nibble.Contents[i]);
 	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
 	    console.log(nibble.Contents[i]);
-	    zip.addFile(nibble.Contents[i].title + ".pptx", byteArray, '', parseInt('0644', 8) << 16);
+	    zip.addFile(nibble.Contents[i].fileName, byteArray, '', parseInt('0644', 8) << 16);
 	}
 
 	// get everything as a buffer 
@@ -102,7 +103,7 @@ app.get('/download/nibble/:id',function(req,res){
 
 	res.writeHead(200, {
             'Content-Type': 'application/octet-stream',
-            'Content-disposition': 'attachment;filename=' + 'test.zip',
+            'Content-disposition': 'attachment;filename=' + nibble.title + '.zip',
 	});
 	res.end(new Buffer(zipped, 'binary'));
     });
@@ -117,26 +118,13 @@ app.post('/nibble/new', function(req, res) {
           title: req.body.title,
           description: req.body.description
         }).then(function(nibble){
-//	    console.log(req.file);
-	    //	    var byteArray = new Buffer(req.file);
-//	    var FileReader = require('filereader')
-//	    var fileReader = new FileReader();
-//	    fileReader.readAsArrayBuffer(req.file);
-
-//	    fileReader.onload = function (event) {
-//		var byteArray = event.target.result;
-	    //var rawData = new Buffer(byteArray);
-	    var fs = require('fs');
-	    fs.writeFileSync("/tmp/file.pptx", req.file["buffer"], {}, 'binary');
-//	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
-	    var rawData = new Buffer(req.file["buffer"], 'binary');
-//	    console.log("rawData", rawData);
-//	    var rawData = new Buffer(req.file);
+	    console.log("req.file[buffer]", req.file);
+	    console.log("req.file[buffer]", req.files);
 		Content.create({
 		    title: req.body.title,//filename,
-		    file: rawData //req.file["buffer"]
-//		    file: req.file["buffer"]
-//		    fileName: filename
+//		    file: rawData //req.file["buffer"]
+		    file: req.file["buffer"],
+		    fileName: req.file.originalname
 		}).then(function(content){
 		    content.setNibble(nibble);
 		    res.end();
@@ -144,7 +132,6 @@ app.post('/nibble/new', function(req, res) {
 		    console.log("ops: " + error);
 		    res.status(500).json({error: 'error'});
 		});
-//	    };
         }).catch(function(error){
           console.log("ops: " + error);
           res.status(500).json({error: 'error'});

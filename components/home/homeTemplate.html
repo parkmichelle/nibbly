@@ -6,7 +6,7 @@
 	<!-- search bar here -->
 	<div layout="row">
 		<div class="search-bar-container">
-	  		<input type="text" placeholder="Search..." ng-model="searchQuery" class="home-search-bar">
+	  		<input ng-keyup="$event.keyCode == 13 && searchEnter()" type="text" placeholder="Search..." ng-model="searchQuery" class="home-search-bar">
 		</div>
 		<md-button class="home-search-button" href="#/search/{{searchQuery}}">
 			<img id="home-search-icon" src="/icons/SearchIcon.png"></img>

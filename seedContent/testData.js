@@ -41,7 +41,7 @@ module.exports = function(db) {
 	    bio: "A really cool person.",
 	    Nibbles: 
 	    [{
-		title: "Python!",
+		title: "CS Beyond the AP!",
 		description: "Another nibble",
 		num_downloads: 2435,
 		featured: true,
