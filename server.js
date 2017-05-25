@@ -125,13 +125,16 @@ app.post('/nibble/new', function(req, res) {
 
 //	    fileReader.onload = function (event) {
 //		var byteArray = event.target.result;
-//		var rawData = new Buffer(byteArray);
-	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
-	    console.log("rawData", rawData);
+	    //var rawData = new Buffer(byteArray);
+	    var fs = require('fs');
+	    fs.writeFileSync("/tmp/file.pptx", req.file["buffer"], {}, 'binary');
+//	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
+//	    console.log("rawData", rawData);
 //	    var rawData = new Buffer(req.file);
 		Content.create({
 		    title: req.body.title,//filename,
-		    file: rawData //req.file["buffer"]
+//		    file: rawData //req.file["buffer"]
+		    file: req.file["buffer"]
 //		    fileName: filename
 		}).then(function(content){
 		    content.setNibble(nibble);
