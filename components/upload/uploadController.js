@@ -3,12 +3,6 @@
 cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', '$location', '$cookieStore', '$mdToast', '$http',
   function ($scope, $routeParams, $resource, $location, $cookieStore, $mdToast, $http) {
     $scope.uploadNibble = {};
-    // $scope.uploadNibble.title = "";
-    // $scope.uploadNibble.subject = "";
-    // $scope.uploadNibble.duration;
-    // $scope.uploadNibble.difficulty = "";
-    // $scope.uploadNibble.files = [];
-
     $scope.errorMessage = "";
 
     var Nibble = $resource('/nibble/new');
@@ -38,6 +32,7 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
 
     // Upload the photo file selected by the user using a post request to the URL /photos/new
     $scope.createNibbleClick = function (username) {
+	console.log("GOT A CLICK");
         // check all parameters filled
         if (!$scope.uploadNibble.title || !$scope.uploadNibble.description) {
             console.log($scope.uploadNibble);
@@ -47,14 +42,26 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
             return;
         }
 
-        console.log('fileSubmitted', selectedFile);
+        console.log('fileSubmitted: ' + selectedFile);
         
+
+	/// encode file as base64
+	var reader = new FileReader();
+	reader.readAsDataURL(selectedFile);
+	reader.onload = function() {
+	    var dataURL = reader.result;
+	    var string = dataURL.split(',')[1];
+
         // Create a DOM form and add the file
         var domForm = new FormData();
         domForm.append('uploadedfile', selectedFile);
         domForm.append('title', $scope.uploadNibble.title);
+	    domForm.append('encodedFile', string);
         domForm.append('description', $scope.uploadNibble.description);
-        
+
+	    
+
+
         // Using $http to POST the form
         $http.post('/nibble/new', domForm, {
             transformRequest: angular.identity,
@@ -66,6 +73,7 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
             // Couldn't upload the photo. XXX  - Do whatever you want on failure.
             console.error('ERROR uploading file', err);
         });
+	};
 
         // console.log($scope.uploadNibble);
 

@@ -94,7 +94,7 @@ app.get('/download/nibble/:id',function(req,res){
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
 	    console.log(nibble.Contents[i]);
-	    zip.addFile(nibble.Contents[i].title + ".ppt", byteArray, '', parseInt('0644', 8) << 16);
+	    zip.addFile(nibble.Contents[i].title + ".pptx", byteArray, '', parseInt('0644', 8) << 16);
 	}
 
 	// get everything as a buffer 
@@ -110,33 +110,47 @@ app.get('/download/nibble/:id',function(req,res){
 
 app.post('/nibble/new', function(req, res) {
   processFormBody(req, res, function (err) {
-      console.log("req file is ", req.file);
       var timestamp = new Date().valueOf();
       var filename = String(timestamp) + req.file.originalname;
-      console.log("new filename is ", filename);
 
         Nibble.create({
           title: req.body.title,
           description: req.body.description
         }).then(function(nibble){
-          nibble.setUser(1).then(function(user) {
-            res.json(nibble.dataValues);
-          });
-          Content.create({
-            title: filename,
-            file: req.file
-          }).then(function(content){
-            res.end();
-          }).catch(function(error){
-            console.log("ops: " + error);
-            res.status(500).json({error: 'error'});
-          });
+//	    console.log(req.file);
+	    //	    var byteArray = new Buffer(req.file);
+//	    var FileReader = require('filereader')
+//	    var fileReader = new FileReader();
+//	    fileReader.readAsArrayBuffer(req.file);
+
+//	    fileReader.onload = function (event) {
+//		var byteArray = event.target.result;
+	    //var rawData = new Buffer(byteArray);
+	    var fs = require('fs');
+	    fs.writeFileSync("/tmp/file.pptx", req.file["buffer"], {}, 'binary');
+//	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
+	    var rawData = new Buffer(req.file["buffer"], 'binary');
+//	    console.log("rawData", rawData);
+//	    var rawData = new Buffer(req.file);
+		Content.create({
+		    title: req.body.title,//filename,
+		    file: rawData //req.file["buffer"]
+//		    file: req.file["buffer"]
+//		    fileName: filename
+		}).then(function(content){
+		    content.setNibble(nibble);
+		    res.end();
+		}).catch(function(error){
+		    console.log("ops: " + error);
+		    res.status(500).json({error: 'error'});
+		});
+//	    };
         }).catch(function(error){
           console.log("ops: " + error);
           res.status(500).json({error: 'error'});
         });
     });
-  });
+});
 
 var server = app.listen(3000, function () {
     var port = server.address().port;

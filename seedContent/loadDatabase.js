@@ -12,13 +12,8 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
 var db = {};
 
 // load all models from this folder
-<<<<<<< HEAD:loadDatabase.js
-// NOTE: ignores back-up files (those with ~), and the current file
-fs.readdirSync(__dirname + '/models/').filter(function(file) {
-=======
 // NOTE: ignores back-up files (those with ~), and the current file
 fs.readdirSync(path.join(__dirname,'../models/')).filter(function(file) {
->>>>>>> master:seedContent/loadDatabase.js
  return (file.indexOf(".") !== 0) && (file !== "index.js") && (file.indexOf("~") == -1);
 }).forEach(function(file) {
  var model = sequelize["import"](path.join(__dirname,'../models/', file));
