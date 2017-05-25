@@ -94,7 +94,7 @@ app.get('/download/nibble/:id',function(req,res){
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
 	    console.log(nibble.Contents[i]);
-	    zip.addFile(nibble.Contents[i].title + ".ppt", byteArray, '', parseInt('0644', 8) << 16);
+	    zip.addFile(nibble.Contents[i].title + ".pptx", byteArray, '', parseInt('0644', 8) << 16);
 	}
 
 	// get everything as a buffer 
@@ -129,12 +129,13 @@ app.post('/nibble/new', function(req, res) {
 	    var fs = require('fs');
 	    fs.writeFileSync("/tmp/file.pptx", req.file["buffer"], {}, 'binary');
 //	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
+	    var rawData = new Buffer(req.file["buffer"], 'binary');
 //	    console.log("rawData", rawData);
 //	    var rawData = new Buffer(req.file);
 		Content.create({
 		    title: req.body.title,//filename,
-//		    file: rawData //req.file["buffer"]
-		    file: req.file["buffer"]
+		    file: rawData //req.file["buffer"]
+//		    file: req.file["buffer"]
 //		    fileName: filename
 		}).then(function(content){
 		    content.setNibble(nibble);

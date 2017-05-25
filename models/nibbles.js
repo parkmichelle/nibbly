@@ -21,9 +21,10 @@ module.exports = function(sequelize, DataTypes) {
      difficulty : {
 	 type : DataTypes.INTEGER
      },
+/*
      bucketName : {
 	 type : DataTypes.STRING
-     }
+     }*/
  });
     return Nibble;
 };
