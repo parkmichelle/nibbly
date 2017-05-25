@@ -110,28 +110,29 @@ app.get('/download/nibble/:id',function(req,res){
 
 app.post('/nibble/new', function(req, res) {
   processFormBody(req, res, function (err) {
-      console.log("req file is ", req.file);
       var timestamp = new Date().valueOf();
       var filename = String(timestamp) + req.file.originalname;
-      console.log("new filename is ", filename);
 
         Nibble.create({
           title: req.body.title,
           description: req.body.description
         }).then(function(nibble){
-	    console.log(req.file);
+//	    console.log(req.file);
 	    //	    var byteArray = new Buffer(req.file);
-	    var FileReader = require('filereader')
-	    var fileReader = new FileReader();
+//	    var FileReader = require('filereader')
+//	    var fileReader = new FileReader();
 //	    fileReader.readAsArrayBuffer(req.file);
 
 //	    fileReader.onload = function (event) {
 //		var byteArray = event.target.result;
-
+//		var rawData = new Buffer(byteArray);
+	    var rawData = new Uint8Array(req.file["buffer"], 'binary');
+	    console.log("rawData", rawData);
+//	    var rawData = new Buffer(req.file);
 		Content.create({
 		    title: req.body.title,//filename,
-		    file: req.file["buffer"]
-		    //file: byteArray
+		    file: rawData //req.file["buffer"]
+//		    fileName: filename
 		}).then(function(content){
 		    content.setNibble(nibble);
 		    res.end();
@@ -145,7 +146,7 @@ app.post('/nibble/new', function(req, res) {
           res.status(500).json({error: 'error'});
         });
     });
-  });
+});
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
