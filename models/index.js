@@ -41,7 +41,7 @@ db.Content.belongsTo(db.Nibble);
 
 var models = require('./');
 models.sequelize
-    .sync({force: true})
+    .sync()
     .then(function () {
 	console.log('Connection successful');
     })

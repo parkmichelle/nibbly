@@ -90,6 +90,7 @@ app.get('/download/nibble/:id',function(req,res){
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	for (var i = 0; i < nibble.Contents.length; i++){
+      console.log("test");
 	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
