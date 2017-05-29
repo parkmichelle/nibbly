@@ -1,5 +1,9 @@
 # nibbly
 
+## About
+Nibbly is a mentor-to-mentor platform that allows aspiring teachers to create a community around teaching content. The app currently implements upload and download features that cultivate a catalog of encapsulated teaching content, called Nibbles, which include slide decks, videos, text, and code. We recently merged the functionalities of two separate branches to allow this experience to be enjoyed by the users.
+We also have begun our migration of our app onto Amazon Web Services (AWS). We will be using AWS to host the app and in lieu of an entire database scheme (as AWS takes care of effecient storing and getting of data). We are excited about our progress so far and what is to come!
+
 ## Set up Postgres
 
 To get started with Postgres, install it using
