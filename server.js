@@ -86,56 +86,52 @@ app.get('/nibble/:id', function(req, res) {
 });
 
 app.get('/download/nibble/:id',function(req,res){	
-    console.log("made it 0");
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	for (var i = 0; i < nibble.Contents.length; i++){
-	    console.log("about to download:", nibble.Contents[i]);
 	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
-	    console.log(nibble.Contents[i]);
+	    // manually set attributes to be -rw-r--r-- (not a directory)
 	    zip.addFile(nibble.Contents[i].fileName, byteArray, '', parseInt('0644', 8) << 16);
 	}
 
 	// get everything as a buffer 
 	var zipped = zip.toBuffer();
-
+	var size = Buffer.byteLength(zipped, 'binary');
 	res.writeHead(200, {
             'Content-Type': 'application/octet-stream',
-            'Content-disposition': 'attachment;filename=' + nibble.title + '.zip',
+            'Content-Disposition': 'attachment;filename=' + nibble.title + '.zip',
+	    'Content-Length': size
 	});
-	res.end(new Buffer(zipped, 'binary'));
+	res.end(zipped);
     });
 });
 
 app.post('/nibble/new', function(req, res) {
-  processFormBody(req, res, function (err) {
-      var timestamp = new Date().valueOf();
-      var filename = String(timestamp) + req.file.originalname;
-
-        Nibble.create({
-          title: req.body.title,
-          description: req.body.description
-        }).then(function(nibble){
-	    console.log("req.file[buffer]", req.file);
-	    console.log("req.file[buffer]", req.files);
-		Content.create({
-		    title: req.body.title,//filename,
-//		    file: rawData //req.file["buffer"]
-		    file: req.file["buffer"],
-		    fileName: req.file.originalname
-		}).then(function(content){
-		    content.setNibble(nibble);
-		    res.end();
-		}).catch(function(error){
-		    console.log("ops: " + error);
-		    res.status(500).json({error: 'error'});
-		});
-        }).catch(function(error){
-          console.log("ops: " + error);
-          res.status(500).json({error: 'error'});
-        });
+    processFormBody(req, res, function (err) {
+	var timestamp = new Date().valueOf();
+	var filename = String(timestamp) + req.file.originalname;
+	Nibble.create({
+            title: req.body.title,
+            description: req.body.description
+	}).then(function(nibble){
+	    Content.create({
+		title: req.body.title,
+		file: req.file["buffer"],
+		fileName: req.file.originalname
+	    }).then(function(content){
+		content.setNibble(nibble);
+		res.status(200).send(JSON.stringify(nibble.id));
+		res.end();
+	    }).catch(function(error){
+		console.log("ops: " + error);
+		res.status(500).json({error: 'error'});
+	    });
+	}).catch(function(error){
+            console.log("ops: " + error);
+            res.status(500).json({error: 'error'});
+	});
     });
 });
 
