@@ -1,31 +1,37 @@
 <!-- title -->
 <div class="flex-container">
-	<div class="home-title">
-	  nibbly
-	</div>
-	<!-- search bar here -->
-	<div layout="row">
-		<div class="search-bar-container">
-	  		<input ng-keyup="$event.keyCode == 13 && searchEnter()" type="text" placeholder="Search..." ng-model="searchQuery" class="home-search-bar">
-		</div>
-		<md-button class="home-search-button" href="#/search/{{searchQuery}}">
-			<img id="home-search-icon" src="/icons/SearchIcon.png"></img>
-		</md-button>
-	</div>
-	<!-- featured section here -->
-	<div class="home-featured-title-container">
-		<h2 class="home-featured-title">Featured</h2>
-	</div>
-	<div class="home-featured-container">
-  		<div class="home-featured-tile" ng-repeat="item in featuredNibbles">
-  			<div class="home-featured-nibble">
-	            <a href="#/nibble-detail/{{item.id}}">{{item.title}}</a>
-	            <h4>By {{item.User.name}}</h4>
-	            <div class="all-search-result-bottom">
-	                <span>{{item.numDownloads}}</span>
-	                <span>{{item.rating}} stars</span>
-	            </div>
-            </div>
-        </div>
-	</div>
+  <div class="home-title">
+    nibbly
+  </div>
+  <!-- search bar here -->
+  <div layout="row">
+    <div class="search-bar-container">
+      <input ng-keyup="$event.keyCode == 13 && searchEnter()" type="text" placeholder="Search..." ng-model="searchQuery" class="home-search-bar">
+    </div>
+    <md-button class="home-search-button" href="#/search/{{searchQuery}}">
+      <img id="home-search-icon" src="/icons/SearchIcon.png"></img>
+    </md-button>
+  </div>
+  <!-- featured section here -->
+  <div class="home-featured-title-container">
+    <h2 class="home-featured-title">Featured</h2>
+  </div>
+  <div class="home-featured-container">
+    <div class="home-featured-tile" ng-repeat="item in featuredNibbles">
+
+      <md-card>
+	<md-card-header>
+	  <md-card-header-text>
+	    <span class="md-title">	<a href="#/nibble-detail/{{item.id}}">{{item.title}}</a></span>
+	    <span class="md-subhead">By: {{item.User.name}}</span>
+	  </md-card-header-text>
+	</md-card-header>
+	<md-card-actions layout="row" layout-align="end center">
+	  <m
+	     <span>{{item.numDownloads}}</span>
+	     <span>{{item.rating}} stars</span>
+	</md-card-actions>
+      </md-card>
+    </div>
+  </div>
 </div>
