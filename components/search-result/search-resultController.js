@@ -5,7 +5,7 @@ cs142App.controller('SearchResultController', ['$scope', '$resource', '$routePar
 
     $scope.searchQuery = $routeParams.query;
 
-	var Nibbles = $resource('/list/nibbles', {}, {
+	var Nibbles = $resource('/list/nibbles/'+$routeParams.query, {}, {
 	    get: { method: 'GET', isArray: true }
 	});
 	

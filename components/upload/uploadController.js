@@ -5,15 +5,6 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
     $scope.uploadNibble = {};
     $scope.errorMessage = "";
 
-/*
-      $scope.submit = function() {
-	  if ($scope.form.file.$valid && $scope.file) {
-	      Console.log($scope.form);
-              $scope.upload($scope.file);
-	  }
-      };
-*/
-
     var Nibble = $resource('/nibble/new');
 
     // handle file upload

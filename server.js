@@ -36,7 +36,7 @@ var app = express();
 
 /* create a relation such that each user
    can have many nibbles (automatically handles
-   creation of foreign keys
+   creation of foreign keys)
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
@@ -73,6 +73,19 @@ app.get('/list/featured', function(req, res) {
 	order: [['rating', 'DESC']],
 	limit: 5
     }).then(function(nibbles) {
+	res.json(nibbles);
+    });
+});
+
+// search nibbles
+app.get('/list/nibbles/:query', function(req, res) {
+    console.log("query: ", req.params.query);
+    Nibble.findAll({
+	where : {title: {$iLike : '%' + req.params.query + '%'}},
+	include : [User],
+	order: [['rating', 'DESC']]
+    }).then(function(nibbles) {
+	console.log("nibbles: ", nibbles);
 	res.json(nibbles);
     });
 });
@@ -122,6 +135,7 @@ app.post('/nibble/new', function(req, res) {
 		fileName: req.file.originalname
 	    }).then(function(content){
 		content.setNibble(nibble);
+		nibble.setUser(1);
 		res.status(200).send(JSON.stringify(nibble.id));
 		res.end();
 	    }).catch(function(error){
