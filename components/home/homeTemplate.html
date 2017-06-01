@@ -18,16 +18,14 @@
   </div>
   <div class="home-featured-container">
     <div class="home-featured-tile" ng-repeat="item in featuredNibbles">
-
       <md-card>
 	<md-card-header>
 	  <md-card-header-text>
-	    <span class="md-title">	<a href="#/nibble-detail/{{item.id}}">{{item.title}}</a></span>
+	    <span class="md-title"><a href="#/nibble-detail/{{item.id}}">{{item.title}}</a></span>
 	    <span class="md-subhead">By: {{item.User.name}}</span>
 	  </md-card-header-text>
 	</md-card-header>
 	<md-card-actions layout="row" layout-align="end center">
-	  <m
 	     <span>{{item.numDownloads}}</span>
 	     <span>{{item.rating}} stars</span>
 	</md-card-actions>
