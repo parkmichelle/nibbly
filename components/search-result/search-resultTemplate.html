@@ -4,27 +4,29 @@
   </div>
   <div layout="column" style="height:500px;">
     <div class="md-padding" layout="row" layout-wrap>
-	<md-card ng-repeat="item in data | filter: { title: searchQuery } | orderBy : 'rating' : true">
-	  <md-card-header>
-	    <md-card-header-text>
-	      <span class="md-title"><a href="#/nibble-detail/{{item.id}}">{{item.title}}</a></span>
-	      <span class="md-subhead">By: {{item.User.name}}</span>
-	    </md-card-header-text>
-	  </md-card-header>
-<md-card-content>
-	<div class="all-search-result-actions">
+      <md-card style="width:400px" ng-repeat="item in data | filter: { title: searchQuery } | orderBy : 'rating' : true">
+	<md-card-header>
+	  <md-card-header-text>
+	    <span class="md-title"><a href="#/nibble-detail/{{item.id}}">{{item.title}}</a></span>
+	    <span class="md-subhead">By: {{item.User.name}}</span>
+	  </md-card-header-text>
+	</md-card-header>
+	<md-card-content>
           <p>
             {{item.description}}
           </p>
-	</div>
-</md-card-content>
-	  <md-card-actions layout="row" layout-align="end center">
+	</md-card-content>
+	<md-card-footer text-align="right">
+	  <div style="float:left">
 	    <span>{{item.numDownloads}}</span>
+	    <span>{{item.rating}} stars</span>
+	  </div>
+	  <div style="float:right">
             <md-icon ng-bind="'code'"></md-icon>
             <md-icon ng-bind="'slideshow'"></md-icon>
             <md-icon ng-bind="'videocam'"></md-icon>
-	    <span>{{item.rating}} stars</span>
-	  </md-card-actions>
-	</md-card>
+	  </div>
+	</md-card-footer>
+      </md-card>
     </div>
-</div>
+  </div>
