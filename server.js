@@ -127,7 +127,9 @@ app.post('/nibble/new', function(req, res) {
 	var filename = String(timestamp) + req.file.originalname;
 	Nibble.create({
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+	    num_downloads: 0,
+	    rating: 0
 	}).then(function(nibble){
 	    Content.create({
 		title: req.body.title,
