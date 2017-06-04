@@ -101,6 +101,8 @@ app.get('/nibble/:id', function(req, res) {
 app.get('/download/nibble/:id',function(req,res){	
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	var newNumDownloads = nibble.num_downloads + 1;
+	nibble.update({num_downloads: newNumDownloads});
 	for (var i = 0; i < nibble.Contents.length; i++){
 	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var AdmZip = require('adm-zip');
