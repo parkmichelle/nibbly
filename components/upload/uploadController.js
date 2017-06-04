@@ -5,6 +5,36 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
     $scope.uploadNibble = {};
     $scope.errorMessage = "";
 
+      $scope.durationSlider = {
+	  value: 45,
+	  options: {
+	      floor: 5,
+	      ceil: 300,
+	      step: 5,
+	      translate: function(value) {
+		  if (value%60 == 0) {
+		      return value/60 + "hr ";
+		  } else {
+		      return Math.floor(value/60) + "hr " + value%60 + "min";
+		  }
+	      }
+	  }
+      };
+
+      $scope.difficultySlider = {
+	  value: 1,
+	  options: {
+	      showTicksValues: true,
+	      stepsArray: [
+		  {value: 1, legend: 'Beginner'},
+		  {value: 2},
+		  {value: 3, legend: 'Intermediate'},
+		  {value: 4},
+		  {value: 5, legend: 'Advanced'},
+	      ]
+	  }
+      };
+      console.log($scope.slider1);
     var Nibble = $resource('/nibble/new');
 
     // handle file upload
@@ -37,6 +67,8 @@ cs142App.controller('UploadController', ['$scope', '$routeParams', '$resource', 
           domForm.append('uploadedfile', selectedFile);
           domForm.append('title', $scope.uploadNibble.title);
           domForm.append('description', $scope.uploadNibble.description);
+          domForm.append('duration', $scope.durationSlider.value);
+          domForm.append('difficulty', $scope.difficultySlider.value);
 
           // Using $http to POST the form
           $http.post('/nibble/new', domForm, {

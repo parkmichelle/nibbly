@@ -13,6 +13,7 @@ module.exports = function(db) {
 		num_downloads: 2435,
 		rating: 5,
 		difficulty: 3,
+		duration: 20,
 		featured: true,
 		Contents: [{
 		    title: "Giphy Slides",
@@ -49,7 +50,7 @@ module.exports = function(db) {
 		num_downloads: 1703,
 		rating: 3,
 		difficulty: 3,
-
+		duration: 75,
 		featured: true,
 		Contents: [{
 		    title: "CS Beyond the AP",

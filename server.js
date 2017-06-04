@@ -93,6 +93,7 @@ app.get('/list/nibbles/:query', function(req, res) {
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
+    console.log("now finding", id);
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	res.json(nibble);
     });
@@ -131,7 +132,9 @@ app.post('/nibble/new', function(req, res) {
             title: req.body.title,
             description: req.body.description,
 	    num_downloads: 0,
-	    rating: 0
+	    rating: 0,
+	    difficulty: parseInt(req.body.difficulty),
+	    duration: parseInt(req.body.duration)
 	}).then(function(nibble){
 	    Content.create({
 		title: req.body.title,
@@ -139,7 +142,7 @@ app.post('/nibble/new', function(req, res) {
 		fileName: req.file.originalname
 	    }).then(function(content){
 		content.setNibble(nibble);
-		nibble.setUser(1);
+//		nibble.setUser(1);
 		res.status(200).send(JSON.stringify(nibble.id));
 		res.end();
 	    }).catch(function(error){
