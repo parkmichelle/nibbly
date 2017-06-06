@@ -109,6 +109,57 @@ app.get('/download/nibble/:id',function(req,res){
     });
 });
 
+function uploadFile(file) { 
+    var fs = require('fs');
+    var google = require('googleapis');
+    var drive = google.drive('v3');
+    var SCOPES = ['https://www.googleapis.com/auth/drive'];
+    var key = require('../api_keys/client_secret.json');
+
+    var jwtClient = new google.auth.JWT(
+	key.client_email,
+	null,
+	key.private_key,
+	SCOPES,
+	null
+    );
+
+    jwtClient.authorize(function (err, tokens) {
+	if (err) {
+	    console.log(err);
+	    return;
+	}
+
+	drive.files.create({
+	    auth: jwtClient,
+	    resource: {
+		name: 'Testing??',
+		mimeType: 'text/plain'
+	    },
+	    media: {
+		mimeType: 'application/vnd.ms-powerpoint',
+//		mimeType: 'text/plain',
+		body: file
+	    }
+	}, function(err, resp) {
+	    console.log("first response:", resp);
+	    var outputStream = new ByteArrayOutputStream();
+	    drive.files.get({
+		fileId: resp.id,
+		auth: jwtClient,
+		fields: 'webContentLink, webViewLink, viewersCanCopyContent'
+	    }, function (err, resp) {
+		if (err) {
+		    console.log('The API returned an error: ' + err);
+		    return;
+		}
+		console.log(resp);
+	    }).executeMediaAndDownloadTo(outputStream);
+	    console.log(outputStream);
+	});
+    });
+}
+
 app.post('/nibble/new', function(req, res) {
   processFormBody(req, res, function (err) {
       var timestamp = new Date().valueOf();
@@ -118,11 +169,9 @@ app.post('/nibble/new', function(req, res) {
           title: req.body.title,
           description: req.body.description
         }).then(function(nibble){
-	    console.log("req.file[buffer]", req.file);
-	    console.log("req.file[buffer]", req.files);
+	    uploadFile(req.body.title, req.file["buffer"]);
 		Content.create({
-		    title: req.body.title,//filename,
-//		    file: rawData //req.file["buffer"]
+		    title: req.body.title,
 		    file: req.file["buffer"],
 		    fileName: req.file.originalname
 		}).then(function(content){
