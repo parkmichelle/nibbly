@@ -1,6 +1,6 @@
 'use strict';
 
-var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource', 'ngCookies']);
+var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource', 'ngCookies', 'rzModule']);
 
 cs142App.config(['$routeProvider',
     function ($routeProvider) {

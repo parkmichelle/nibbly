@@ -36,7 +36,7 @@ var app = express();
 
 /* create a relation such that each user
    can have many nibbles (automatically handles
-   creation of foreign keys
+   creation of foreign keys)
 */
 User.hasMany(Nibble);
 Nibble.belongsTo(User);
@@ -77,35 +77,50 @@ app.get('/list/featured', function(req, res) {
     });
 });
 
+// search nibbles
+app.get('/list/nibbles/:query', function(req, res) {
+    console.log("query: ", req.params.query);
+    Nibble.findAll({
+	where : {title: {$iLike : '%' + req.params.query + '%'}},
+	include : [User],
+	order: [['rating', 'DESC']]
+    }).then(function(nibbles) {
+	console.log("nibbles: ", nibbles);
+	res.json(nibbles);
+    });
+});
+
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
+    console.log("now finding", id);
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	res.json(nibble);
     });
 });
 
 app.get('/download/nibble/:id',function(req,res){	
-    console.log("made it 0");
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
+	var newNumDownloads = nibble.num_downloads + 1;
+	nibble.update({num_downloads: newNumDownloads});
 	for (var i = 0; i < nibble.Contents.length; i++){
-	    console.log("about to download:", nibble.Contents[i]);
 	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var AdmZip = require('adm-zip');
 	    var zip = new AdmZip();
-	    console.log(nibble.Contents[i]);
+	    // manually set attributes to be -rw-r--r-- (not a directory)
 	    zip.addFile(nibble.Contents[i].fileName, byteArray, '', parseInt('0644', 8) << 16);
 	}
 
 	// get everything as a buffer 
 	var zipped = zip.toBuffer();
-
+	var size = Buffer.byteLength(zipped, 'binary');
 	res.writeHead(200, {
             'Content-Type': 'application/octet-stream',
-            'Content-disposition': 'attachment;filename=' + nibble.title + '.zip',
+            'Content-Disposition': 'attachment;filename=' + nibble.title + '.zip',
+	    'Content-Length': size
 	});
-	res.end(new Buffer(zipped, 'binary'));
+	res.end(zipped);
     });
 });
 
@@ -161,30 +176,34 @@ function uploadFile(file) {
 }
 
 app.post('/nibble/new', function(req, res) {
-  processFormBody(req, res, function (err) {
-      var timestamp = new Date().valueOf();
-      var filename = String(timestamp) + req.file.originalname;
-
-        Nibble.create({
-          title: req.body.title,
-          description: req.body.description
-        }).then(function(nibble){
-	    uploadFile(req.body.title, req.file["buffer"]);
-		Content.create({
-		    title: req.body.title,
-		    file: req.file["buffer"],
-		    fileName: req.file.originalname
-		}).then(function(content){
-		    content.setNibble(nibble);
-		    res.end();
-		}).catch(function(error){
-		    console.log("ops: " + error);
-		    res.status(500).json({error: 'error'});
-		});
-        }).catch(function(error){
-          console.log("ops: " + error);
-          res.status(500).json({error: 'error'});
-        });
+    processFormBody(req, res, function (err) {
+	var timestamp = new Date().valueOf();
+	var filename = String(timestamp) + req.file.originalname;
+	Nibble.create({
+            title: req.body.title,
+            description: req.body.description,
+	    num_downloads: 0,
+	    rating: 0,
+	    difficulty: parseInt(req.body.difficulty),
+	    duration: parseInt(req.body.duration)
+	}).then(function(nibble){
+	    Content.create({
+		title: req.body.title,
+		file: req.file["buffer"],
+		fileName: req.file.originalname
+	    }).then(function(content){
+		content.setNibble(nibble);
+//		nibble.setUser(1);
+		res.status(200).send(JSON.stringify(nibble.id));
+		res.end();
+	    }).catch(function(error){
+		console.log("ops: " + error);
+		res.status(500).json({error: 'error'});
+	    });
+	}).catch(function(error){
+            console.log("ops: " + error);
+            res.status(500).json({error: 'error'});
+	});
     });
 });
 
