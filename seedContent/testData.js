@@ -1,8 +1,83 @@
 module.exports = function(db) {
     var fs = require('fs');
-    var giphySlides = fs.readFile(__dirname + '/GiphySlides.pptx', function(err,data){
-//    var giphySlides = fs.readFile(__dirname + '/CS_Beyond_the_AP.pptx', function(err,data){
-	if(err){
+    var fileName1 =  '/GiphySlides.pptx';
+    var fileName2 =  '/Giphy API.mp4';
+    fs.readFile(__dirname + fileName1, function(err, fileData1){
+	fs.readFile(__dirname + fileName2, function(err, fileData2){
+
+	var metaData = {
+	    Nibble: {
+		title: "Intro to Giphy API",
+		description: "A nibble",
+		num_downloads: 2435,
+		rating: 5,
+		difficulty: 3,
+		duration: 20,
+		featured: true
+	    },
+	    Contents: [
+		{
+		    title: "Giphy Slides",
+		    fileName: fileName1,
+		    file : fileData1
+		},
+		{
+		    title: "Giphy Video",
+		    fileName: fileName2,
+		    file : fileData2
+		}
+	    ],
+	    User: {
+		name: "Rachel Gardner",
+		bio: "Just some person."
+	    }
+	};
+
+	require('./createNibble.js')(metaData, fileData1, fileData2);
+
+	});
+    });
+
+    var fileName1 =  '/CS_Beyond_the_AP.pptx';
+    var fileName2 =  '/NVIDIA_AI_Car_Demonstration.mp4';
+    fs.readFile(__dirname + fileName1, function(err, fileData1){
+	fs.readFile(__dirname + fileName2, function(err, fileData2){
+
+	var metaData = {
+	    Nibble: {
+		title: "CS Beyond the AP",
+		description: "An overview of what computer science looks like after high school.",
+		num_downloads: 2435,
+		rating: 5,
+		difficulty: 3,
+		duration: 20,
+		featured: true
+	    },
+	    Contents: [
+		{
+		    title: "Slides",
+		    fileName: fileName1,
+		    file : fileData1
+		},
+		{
+		    title: "Video of AI Car",
+		    fileName: fileName2,
+		    file : fileData2
+		}
+	    ],
+	    User: {
+		name: "Michelle Park",
+		bio: "A wonderful person"
+	    }
+	};
+
+	require('./createNibble.js')(metaData, fileData1, fileData2);
+
+	});
+    });
+
+/*
+	    if(err){
 	    throw err;
 	}
 

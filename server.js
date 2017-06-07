@@ -106,6 +106,7 @@ app.get('/download/nibble/:id',function(req,res){
 //	var newNumDownloads = nibble.num_downloads + 1;
 //	nibble.update({num_downloads: newNumDownloads});
 	for (var i = 0; i < nibble.Contents.length; i++){
+	    i = 0;
 //	    var byteArray = new Buffer(nibble.Contents[i].file);
 	    var fileId = nibble.Contents[i].fileId;
 	    if (fileId != null) { 
@@ -123,11 +124,18 @@ app.get('/download/nibble/:id',function(req,res){
 			return;
 		    }
 
-		    var destType = 'application/vnd.oasis.opendocument.presentation';
+		    var mime = require('mime');
+		    var sourceType = mime.lookup(metaData.Contents[i].fileName);
 
+		    if (sourceType == 'application/vnd.google-apps.presentation') {
+			var destType = 'application/vnd.oasis.opendocument.presentation';
+		    } else {
+			var destType = sourceType;
+		    }
+		    console.log(metaData.Contents[i].fileName);
 		    res.set('Content-Type', destType);
 		    res.type(destType);
-		    res.set('Content-Disposition','attachment;filename=' + nibble.title + '.pptx');
+		    res.set('Content-Disposition','attachment;filename='+metaData.Contents[i].fileName);// + nibble.title + '.pptx');
 
 		    var stream = drive.files.export({
 			fileId: fileId,

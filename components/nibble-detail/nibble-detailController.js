@@ -18,6 +18,7 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 	  // used to waive normal XSS scripting protections
 	  $scope.contentLink = $sce.trustAsResourceUrl($scope.contentLink); 
 	  $scope.downloadLink = $sce.trustAsResourceUrl(nibble.Contents[1].downloadLink);
+	  console.log("downloadLink", nibble.Contents[1].downloadLink);
 	  console.log("currNibble: ", nibble);
       });
 

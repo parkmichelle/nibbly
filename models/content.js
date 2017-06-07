@@ -10,6 +10,15 @@ module.exports = function(sequelize, DataTypes) {
      file : {
 	 type : DataTypes.BLOB,
      },
+     fileId : {
+	 type : DataTypes.STRING,
+     },
+     downloadLink : {
+	 type : DataTypes.STRING,
+     },
+     viewLink : {
+	 type : DataTypes.STRING,
+     },
      fileName : {
 	 type : DataTypes.STRING,
      },

@@ -35,7 +35,7 @@
 	</span>
 	<span class ="nibble-detail-videos-container">
 	  <h2>Videos</h2>
-	  <video ng-if="{{currNibble.Contents[1]}} != null" controls="controls" ng-src="{{downloadLink}}" width="700" height="500">
+	  <video ng-if="currNibble.Contents[1] != null" controls="controls" ng-src="{{downloadLink}}" width="700" height="500">
 	  </video>
 	  <div ng-f="{{currNibble.Contents[1]}} == null"><p> [None]</p> </div>
 </div>
