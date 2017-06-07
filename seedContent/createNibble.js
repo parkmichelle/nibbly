@@ -14,6 +14,7 @@ function createNibble(metaData, fileInfo1, fileInfo2) {
 	    title: metaData.Nibble.title,
 	    description: metaData.Nibble.description,
 	    num_downloads: 0,
+	    featured: metaData.Nibble.featured,
 	    rating: 0,
 	    difficulty: parseInt(metaData.Nibble.difficulty),
 	    duration: parseInt(metaData.Nibble.duration)
