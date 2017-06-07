@@ -1,7 +1,7 @@
 'use strict';
 
-cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resource',
-  function ($scope, $routeParams, $resource) {
+cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resource', '$sce',
+  function ($scope, $routeParams, $resource, $sce) {
     /*
      * Since the route is specified as '/users/:userId' in $routeProvider config the
      * $routeParams  should have the userId property set with the path from the URL.
@@ -12,6 +12,13 @@ cs142App.controller('NibbleDetailController', ['$scope', '$routeParams', '$resou
 
       Nibble.get({id: currNibbleId}, function(nibble) {
 	  $scope.currNibble = nibble;
+	  $scope.contentLink = "https://docs.google.com/presentation/d/";
+	  $scope.contentLink += nibble.Contents[0].fileId;
+	  $scope.contentLink += "/embed?start=false&loop=false&delayms=3000";
+	  // used to waive normal XSS scripting protections
+	  $scope.contentLink = $sce.trustAsResourceUrl($scope.contentLink); 
+	  $scope.downloadLink = $sce.trustAsResourceUrl(nibble.Contents[1].downloadLink);
+	  console.log("currNibble: ", nibble);
       });
 
       // Get the modal

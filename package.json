@@ -37,6 +37,7 @@
     "ng-embed": "^2.1.1",
     "nodemon": "^1.11.0",
     "pg": "^6.1.5",
-    "sequelize": "^3.30.4"
+    "sequelize": "^3.30.4",
+    "stream": "0.0.2"
   }
 }

@@ -26,22 +26,16 @@
 <!-- media contents -->
 <div class="nibble-detail-data-container">
 	<span class="nibble-detail-slides-container">
-		<h2>Slides</h2>
+		<h2>Slides</h2><a href={{downloadLink}}><img id="nibble-detail-download-button" ng-src="/components/nibble-detail/nibble-detailImages/icon-download.png"></a>
 		<div class="nibble-detail-slide-view">
-			<!-- TODO: ng-repeat it from db -->
-			<ng-embed embed-data="{{pdf-data}}" embed-options="{{embed-options}}"></ng-embed>
-			<img class="nibble-detail-slide-img" ng-src="/components/nibble-detail/nibble-detailImages/testnibble_1.png">
+		  <!-- TODO: ng-repeat it from db -->
+			<!--			<ng-embed embed-data="{{pdf-data}}" embed-options="{{embed-options}}"></ng-embed>-->
+			<iframe src={{contentLink}} frameborder="0" width="700" height="500" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 		</div>
 	</span>
 	<span class ="nibble-detail-videos-container">
-		<h2>Videos</h2>
-		<!-- TODO: ng-repeat it from db -->
-		<div class="nibble-detail-video-view">
-			<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noVideoFound.png">
-		</div>
-		<div class="nibble-detail-video-view">
-			<img class="nibble-detail-video-img" ng-src="/components/nibble-detail/nibble-detailImages/noVideoFound.png">
-		</div>
-
-	</div>
+	  <h2>Videos</h2>
+	  <video ng-if="{{currNibble.Contents[1]}} != null" controls="controls" ng-src="{{downloadLink}}" width="700" height="500">
+	  </video>
+	  <div ng-f="{{currNibble.Contents[1]}} == null"><p> [None]</p> </div>
 </div>

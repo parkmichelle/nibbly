@@ -93,119 +93,176 @@ app.get('/list/nibbles/:query', function(req, res) {
 // get a nibble by ID
 app.get('/nibble/:id', function(req, res) {
     var id = req.params.id;
-    console.log("now finding", id);
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
 	res.json(nibble);
     });
 });
 
+var Stream = require('stream');
+
 app.get('/download/nibble/:id',function(req,res){	
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
-	var newNumDownloads = nibble.num_downloads + 1;
-	nibble.update({num_downloads: newNumDownloads});
+//	var newNumDownloads = nibble.num_downloads + 1;
+//	nibble.update({num_downloads: newNumDownloads});
 	for (var i = 0; i < nibble.Contents.length; i++){
-	    var byteArray = new Buffer(nibble.Contents[i].file);
-	    var AdmZip = require('adm-zip');
-	    var zip = new AdmZip();
-	    // manually set attributes to be -rw-r--r-- (not a directory)
-	    zip.addFile(nibble.Contents[i].fileName, byteArray, '', parseInt('0644', 8) << 16);
-	}
+//	    var byteArray = new Buffer(nibble.Contents[i].file);
+	    var fileId = nibble.Contents[i].fileId;
+	    if (fileId != null) { 
+		var jwtClient = new google.auth.JWT(
+		    key.client_email,
+		    null,
+		    key.private_key,
+		    SCOPES,
+		    null
+		);
 
+		jwtClient.authorize(function (err, tokens) {
+		    if (err) {
+			console.log('The API returned an error: ' + err);
+			return;
+		    }
+
+		    var destType = 'application/vnd.oasis.opendocument.presentation';
+
+		    res.set('Content-Type', destType);
+		    res.type(destType);
+		    res.set('Content-Disposition','attachment;filename=' + nibble.title + '.pptx');
+
+		    var stream = drive.files.export({
+			fileId: fileId,
+			mimeType: destType,
+			auth: jwtClient,
+			fields: 'webContentLink, webViewLink, viewersCanCopyContent',
+			alt: 'media'
+		    }).on('end', function() {
+
+		    }).on('error', function(err) {
+			console.log('Error during download', err);
+		    }).pipe(res);
+		});
+	    }
+/*
 	// get everything as a buffer 
 	var zipped = zip.toBuffer();
 	var size = Buffer.byteLength(zipped, 'binary');
+
 	res.writeHead(200, {
             'Content-Type': 'application/octet-stream',
             'Content-Disposition': 'attachment;filename=' + nibble.title + '.zip',
 	    'Content-Length': size
 	});
 	res.end(zipped);
+*/
+	}
     });
 });
 
-function uploadFile(file) { 
-    var fs = require('fs');
-    var google = require('googleapis');
-    var drive = google.drive('v3');
-    var SCOPES = ['https://www.googleapis.com/auth/drive'];
-    var key = require('../api_keys/client_secret.json');
+var fs = require('fs');
+var google = require('googleapis');
+var drive = google.drive('v3');
+var SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/drive.metadata'];
+var key = require('../api_keys/client_secret.json');
 
-    var jwtClient = new google.auth.JWT(
-	key.client_email,
-	null,
-	key.private_key,
-	SCOPES,
-	null
-    );
 
-    jwtClient.authorize(function (err, tokens) {
-	if (err) {
-	    console.log(err);
-	    return;
-	}
-
-	drive.files.create({
-	    auth: jwtClient,
-	    resource: {
-		name: 'Testing??',
-		mimeType: 'text/plain'
-	    },
-	    media: {
-		mimeType: 'application/vnd.ms-powerpoint',
-//		mimeType: 'text/plain',
-		body: file
-	    }
-	}, function(err, resp) {
-	    console.log("first response:", resp);
-	    var outputStream = new ByteArrayOutputStream();
-	    drive.files.get({
-		fileId: resp.id,
-		auth: jwtClient,
-		fields: 'webContentLink, webViewLink, viewersCanCopyContent'
-	    }, function (err, resp) {
-		if (err) {
-		    console.log('The API returned an error: ' + err);
-		    return;
-		}
-		console.log(resp);
-	    }).executeMediaAndDownloadTo(outputStream);
-	    console.log(outputStream);
+function createNibble(metaData, res, resp) {
+    Nibble.create({
+	title: metaData.title,
+	description: metaData.description,
+	num_downloads: 0,
+	rating: 0,
+	difficulty: parseInt(metaData.difficulty),
+	duration: parseInt(metaData.duration)
+    }).then(function(nibble){
+	Content.create({
+	    title: metaData.title,
+	    fileId: resp.id, 
+	    downloadLink: resp.webContentLink,
+	    viewLink: resp.webViewLink,
+	    fileName: metaData.title
+	}).then(function(content){
+	    content.setNibble(nibble);
+//	    nibble.setUser(1);
+	    res.status(200).send(JSON.stringify(nibble.id));
+	    res.end();
+	}).catch(function(error){
+	    console.log("ops: " + error);
+	    res.status(500).json({error: 'error'});
 	});
+    }).catch(function(error){
+	console.log("ops: " + error);
+	res.status(500).json({error: 'error'});
     });
 }
 
+var mime = require('mime');
+
 app.post('/nibble/new', function(req, res) {
     processFormBody(req, res, function (err) {
-	var timestamp = new Date().valueOf();
-	var filename = String(timestamp) + req.file.originalname;
-	Nibble.create({
-            title: req.body.title,
-            description: req.body.description,
-	    num_downloads: 0,
-	    rating: 0,
-	    difficulty: parseInt(req.body.difficulty),
-	    duration: parseInt(req.body.duration)
-	}).then(function(nibble){
-	    Content.create({
-		title: req.body.title,
-		file: req.file["buffer"],
-		fileName: req.file.originalname
-	    }).then(function(content){
-		content.setNibble(nibble);
-//		nibble.setUser(1);
-		res.status(200).send(JSON.stringify(nibble.id));
-		res.end();
-	    }).catch(function(error){
-		console.log("ops: " + error);
-		res.status(500).json({error: 'error'});
+	var metaData = req.body;
+	var jwtClient = new google.auth.JWT(
+	    key.client_email,
+	    null,
+	    key.private_key,
+	    SCOPES,
+	    null
+	);
+
+	var sourceType = mime.lookup(req.file.originalname);
+
+	// convert powerpoints to slides (TODO - cover all cases)
+	if (sourceType == 'application/vnd.ms-powerpoint' ||
+	   sourceType == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+	    var destType = 'application/vnd.google-apps.presentation';
+	} else {
+	    var destType = sourceType;
+	}
+	console.log("sourceType: ", sourceType);
+	console.log("destType: ", destType);
+	jwtClient.authorize(function (err, tokens) {
+	    if (err) {
+		console.log(err);
+		return;
+	    }
+	    console.log("tokens: ", tokens);
+	    drive.files.create({
+		auth: jwtClient,
+		resource: {
+		    name: req.file.originalname,
+		    'mimeType': destType,
+		},
+		viewersCanCopyContent: true,
+		fields: 'webContentLink, webViewLink, id, viewersCanCopyContent',
+		published: true,
+		publishAuto: true,
+		media: {
+		    mimeType: sourceType,
+		    body: req.file["buffer"]
+		}
+	    }, function(err, resp) {
+		console.log("inner resp", resp);
+		var userPermission = {
+		    'type': 'anyone',
+		    'role': 'reader',
+		}
+		drive.permissions.create({
+		    resource: userPermission,
+		    auth: jwtClient,
+		    fileId: resp.id,
+		    fields: 'id',
+		}, function(err) {
+		    if (err) {
+			console.log(err); 			// Handle error
+			return;
+		    }
+		    console.log("ID: ", resp.id);
+		    createNibble(metaData, res, resp);
+		});
 	    });
-	}).catch(function(error){
-            console.log("ops: " + error);
-            res.status(500).json({error: 'error'});
 	});
     });
 });
+
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
