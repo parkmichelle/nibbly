@@ -2,41 +2,47 @@
 function createNibble(metaData, fileInfo1, fileInfo2) {
     var models = require('../models');
     var Nibble = models.Nibble;
+    var User = models.User;
     var Content = models.Content;
     console.log("fileInfo1", fileInfo1);
     console.log("fileInfo2", fileInfo2);
-    Nibble.create({
-	title: metaData.Nibble.title,
-	description: metaData.Nibble.description,
-	num_downloads: 0,
-	rating: 0,
-	difficulty: parseInt(metaData.Nibble.difficulty),
-	duration: parseInt(metaData.Nibble.duration)
-    }).then(function(nibble){
-	Content.create({
-	    title: metaData.Contents[0].title,
-	    fileId: fileInfo1.id, 
-	    downloadLink: fileInfo1.webContentLink,
-	    viewLink: fileInfo1.webViewLink,
-	    fileName: metaData.Contents[0].fileName
-	}).then(function(content1){
-	    content1.setNibble(nibble);
+    User.create({
+	name: metaData.User.name,
+	bio: metaData.User.bio,
+    }).then(function(user){
+	Nibble.create({
+	    title: metaData.Nibble.title,
+	    description: metaData.Nibble.description,
+	    num_downloads: 0,
+	    rating: 0,
+	    difficulty: parseInt(metaData.Nibble.difficulty),
+	    duration: parseInt(metaData.Nibble.duration)
+	}).then(function(nibble){
 	    Content.create({
-		title: metaData.Contents[1].title,
-		fileId: fileInfo2.id, 
-		downloadLink: fileInfo2.webContentLink,
-		viewLink: fileInfo2.webViewLink,
-		fileName: metaData.Contents[1].fileName
-	    }).then(function(content2){
-		content2.setNibble(nibble);
-		//	    nibble.setUser(1);
-		console.log("Nibble id: ", nibble.id);
+		title: metaData.Contents[0].title,
+		fileId: fileInfo1.id, 
+		downloadLink: fileInfo1.webContentLink,
+		viewLink: fileInfo1.webViewLink,
+		fileName: metaData.Contents[0].fileName
+	    }).then(function(content1){
+		content1.setNibble(nibble);
+		Content.create({
+		    title: metaData.Contents[1].title,
+		    fileId: fileInfo2.id, 
+		    downloadLink: fileInfo2.webContentLink,
+		    viewLink: fileInfo2.webViewLink,
+		    fileName: metaData.Contents[1].fileName
+		}).then(function(content2){
+		    content2.setNibble(nibble);
+		    nibble.setUser(user);
+		    console.log("Nibble id: ", nibble.id);
+		});
+	    }).catch(function(error){
+		console.log("ops: " + error);
 	    });
 	}).catch(function(error){
 	    console.log("ops: " + error);
 	});
-    }).catch(function(error){
-	console.log("ops: " + error);
     });
 }
 
