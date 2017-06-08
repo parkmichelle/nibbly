@@ -103,12 +103,12 @@ var Stream = require('stream');
 app.get('/download/nibble/:id',function(req,res){	
     var id = req.params.id;
     Nibble.findById(id, {include:[User, Content]}).then(function(nibble) {
-//	var newNumDownloads = nibble.num_downloads + 1;
-//	nibble.update({num_downloads: newNumDownloads});
-	for (var i = 0; i < nibble.Contents.length; i++){
-	    i = 0;
-//	    var byteArray = new Buffer(nibble.Contents[i].file);
+	var newNumDownloads = nibble.num_downloads + 1;
+	nibble.update({num_downloads: newNumDownloads});
+//	for (var i = 0; i < nibble.Contents.length; i++){
+	var i = 0;
 	    var fileId = nibble.Contents[i].fileId;
+	    console.log("Now downloading...", fileId);
 	    if (fileId != null) { 
 		var jwtClient = new google.auth.JWT(
 		    key.client_email,
@@ -125,17 +125,21 @@ app.get('/download/nibble/:id',function(req,res){
 		    }
 
 		    var mime = require('mime');
-		    var sourceType = mime.lookup(metaData.Contents[i].fileName);
+		    var sourceType = mime.lookup(nibble.Contents[i].fileName);
 
-		    if (sourceType == 'application/vnd.google-apps.presentation') {
+		    if (sourceType == 'application/vnd.google-apps.presentation' ||
+		       'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
 			var destType = 'application/vnd.oasis.opendocument.presentation';
 		    } else {
 			var destType = sourceType;
 		    }
-		    console.log(metaData.Contents[i].fileName);
+
+		    console.log("sourceType: ", sourceType);
+		    console.log("destType: ", destType);
+		    console.log(nibble.Contents[i].fileName);
 		    res.set('Content-Type', destType);
 		    res.type(destType);
-		    res.set('Content-Disposition','attachment;filename='+metaData.Contents[i].fileName);// + nibble.title + '.pptx');
+		    res.set('Content-Disposition','attachment;filename='+nibble.Contents[i].fileName);// + nibble.title + '.pptx');
 
 		    var stream = drive.files.export({
 			fileId: fileId,
@@ -149,7 +153,7 @@ app.get('/download/nibble/:id',function(req,res){
 			console.log('Error during download', err);
 		    }).pipe(res);
 		});
-	    }
+//	    }
 /*
 	// get everything as a buffer 
 	var zipped = zip.toBuffer();
@@ -190,7 +194,7 @@ function createNibble(metaData, res, resp) {
 	    fileName: metaData.title
 	}).then(function(content){
 	    content.setNibble(nibble);
-//	    nibble.setUser(1);
+	    nibble.setUser(1);
 	    res.status(200).send(JSON.stringify(nibble.id));
 	    res.end();
 	}).catch(function(error){
