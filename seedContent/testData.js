@@ -38,6 +38,100 @@ module.exports = function(db) {
 	});
     });
 
+    var data = 
+	{
+	    titles: ['Getting Started with the Giphy API', 'How to Giphy', 'Creating Mobile Apps with Giphy'],
+	    descriptions: ['A brief overview of the Giphy API', 'The name says it all', 'A workshop focused class'],
+	    num_downloads: [ 234, 3465, 2345],
+	    ratings: [5, 4, 2]
+	};
+var i = 0;
+//    for (var i = 0; i < 3; i++) {
+//	console.log(i);
+//	console.log(data.titles[i]);
+var i = 1;
+	var fileName1 =  '/GiphySlides.pptx';
+	var fileName2 =  '/Giphy API.mp4';
+	fs.readFile(__dirname + fileName1, function(err, fileData1){
+	    fs.readFile(__dirname + fileName2, function(err, fileData2){
+		console.log(i);
+		console.log(data.titles[i]);
+		var metaData = {
+		    Nibble: {
+			title: data.titles[i],
+			description: data.descriptions[i],
+			num_downloads: data.num_downloads[i],
+			rating: data.num_downloads[i],
+			difficulty: 3,
+			duration: 20,
+			featured: true
+		    },
+		    Contents: [
+			{
+			    title: "Giphy Slides",
+			    fileName: fileName1,
+			    file : fileData1
+			},
+			{
+			    title: "Giphy Video",
+			    fileName: fileName2,
+			    file : fileData2
+			}
+		    ],
+		    User: {
+			name: "Rachel Gardner",
+			bio: "Just some person.",
+			existing: true
+		    }
+		};
+
+		require('./createNibble.js')(metaData, fileData1, fileData2);
+
+	    });
+	});
+
+    var i = 2;
+	var fileName1 =  '/GiphySlides.pptx';
+	var fileName2 =  '/Giphy API.mp4';
+	fs.readFile(__dirname + fileName1, function(err, fileData1){
+	    fs.readFile(__dirname + fileName2, function(err, fileData2){
+		console.log(i);
+		console.log(data.titles[i]);
+		var metaData = {
+		    Nibble: {
+			title: data.titles[i],
+			description: data.descriptions[i],
+			num_downloads: data.num_downloads[i],
+			rating: data.num_downloads[i],
+			difficulty: 3,
+			duration: 20,
+			featured: true
+		    },
+		    Contents: [
+			{
+			    title: "Giphy Slides",
+			    fileName: fileName1,
+			    file : fileData1
+			},
+			{
+			    title: "Giphy Video",
+			    fileName: fileName2,
+			    file : fileData2
+			}
+		    ],
+		    User: {
+			name: "Rachel Gardner",
+			bio: "Just some person.",
+			existing: true
+		    }
+		};
+
+		require('./createNibble.js')(metaData, fileData1, fileData2);
+
+	    });
+	});
+
+
     var fileName1 =  '/CS_Beyond_the_AP.pptx';
     var fileName2 =  '/NVIDIA_AI_Car_Demonstration.mp4';
     fs.readFile(__dirname + fileName1, function(err, fileData1){
